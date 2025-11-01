@@ -2,6 +2,8 @@
 """
 Script para crear datos de ejemplo en la base de datos
 Ejecutar después de hacer las migraciones
+
+Dummy data para la BBDD.
 """
 import os
 import sys
@@ -15,9 +17,7 @@ from usuarios.models import Usuario
 from productos.models import Categoria, Producto
 from decimal import Decimal
 
-def create_sample_data():
-    print("Creando datos de ejemplo...")
-    
+def create_sample_data():    
     # Crear superusuario si no existe
     if not Usuario.objects.filter(email='admin@admin.com').exists():
         admin = Usuario.objects.create_superuser(
@@ -27,7 +27,6 @@ def create_sample_data():
             first_name='Administrador',
             last_name='Sistema'
         )
-        print("✓ Superusuario creado: admin@admin.com / admin123")
     
     # Crear usuarios de ejemplo
     usuarios_ejemplo = [
@@ -68,7 +67,7 @@ def create_sample_data():
             defaults={'descripcion': cat_data['descripcion']}
         )
         if created:
-            print(f"✓ Categoría creada: {categoria.nombre}")
+            print(f"Categoría creada: {categoria.nombre}")
     
     # Crear productos
     productos_ejemplo = [

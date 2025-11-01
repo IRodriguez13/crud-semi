@@ -9,9 +9,9 @@ const Home = () => {
     <div className="row">
       <div className="col-md-12">
         <div className="jumbotron bg-light p-5 rounded">
-          <h1 className="display-4">Bienvenido al Sistema CRUD</h1>
+          <h1 className="display-4">Bienvenido a BlockBuster Remastered</h1>
           <p className="lead">
-            Sistema completo de gestión de usuarios y productos desarrollado con Django y React.
+            El mítico universo de tus películas favoritas ahora en la web! desarrollado con Django y React.
           </p>
           <hr className="my-4" />
           
@@ -23,7 +23,7 @@ const Home = () => {
                 Gestionar Usuarios
               </Link>
               <Link className="btn btn-success btn-lg" to="/productos" role="button">
-                Ver Productos
+                Catálogo
               </Link>
             </div>
           ) : (

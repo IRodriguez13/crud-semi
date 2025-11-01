@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
         <Link className="navbar-brand" to="/">
-          CRUD Sistema
+          BlockBuster
         </Link>
         
         <button 
@@ -33,18 +33,18 @@ const Navbar = () => {
               <Link className="nav-link" to="/">Inicio</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/productos">Productos</Link>
+              <Link className="nav-link" to="/productos">Películas</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/empresa">Empresa</Link>
+              <Link className="nav-link" to="/empresa">Nosotros</Link>
             </li>
             {currentUser && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/usuarios">Usuarios</Link>
+                  <Link className="nav-link" to="/usuarios">Ustedes</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/consulta-usuarios">Consultas</Link>
+                  <Link className="nav-link" to="/consulta-usuarios">Preguntas</Link>
                 </li>
               </>
             )}
