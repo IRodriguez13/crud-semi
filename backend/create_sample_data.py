@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proyecto.settings')
 django.setup()
 
 from usuarios.models import Usuario
-from productos.models import Genero, Pelicula
+from productos.models import Genero, Pelicula, ForoTema, ForoRespuesta
 from decimal import Decimal
 
 def create_sample_data():
@@ -137,6 +137,86 @@ def create_sample_data():
         )
         if created:
             print(f"✓ Película creada: {pelicula.titulo}")
+    
+    # Crear temas del foro
+    temas_ejemplo = [
+        {
+            'titulo': '¿Cuál es la mejor película de superhéroes de todos los tiempos?',
+            'descripcion': 'He visto muchas películas de superhéroes pero no logro decidir cuál es la mejor. ¿Qué opinan ustedes? Para mí está entre The Dark Knight y Avengers: Endgame.',
+            'usuario': Usuario.objects.get(email='juan@email.com')
+        },
+        {
+            'titulo': 'Películas que te hicieron llorar',
+            'descripcion': 'Comparte esas películas que te tocaron el corazón y te sacaron lágrimas. Yo no puedo ver Coco sin llorar, especialmente la escena final.',
+            'usuario': Usuario.objects.get(email='maria@email.com')
+        },
+        {
+            'titulo': 'Recomendaciones de terror para Halloween',
+            'descripcion': 'Se acerca Halloween y quiero armar una maratón de películas de terror. ¿Cuáles recomiendan que realmente den miedo?',
+            'usuario': Usuario.objects.get(email='admin@admin.com')
+        },
+        {
+            'titulo': 'Películas sobrevaloradas vs infravaloradas',
+            'descripcion': '¿Hay alguna película que todos aman pero a ti no te gustó? ¿O alguna que nadie menciona pero es increíble?',
+            'usuario': Usuario.objects.get(email='juan@email.com')
+        }
+    ]
+    
+    for tema_data in temas_ejemplo:
+        tema, created = ForoTema.objects.get_or_create(
+            titulo=tema_data['titulo'],
+            defaults=tema_data
+        )
+        if created:
+            print(f"✓ Tema del foro creado: {tema.titulo}")
+    
+    # Crear respuestas del foro
+    respuestas_ejemplo = [
+        {
+            'tema': ForoTema.objects.get(titulo__contains='superhéroes'),
+            'usuario': Usuario.objects.get(email='maria@email.com'),
+            'contenido': 'Para mí The Dark Knight es insuperable. Heath Ledger como el Joker fue simplemente perfecto. Esa película elevó el género a otro nivel.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='superhéroes'),
+            'usuario': Usuario.objects.get(email='admin@admin.com'),
+            'contenido': 'Yo voto por Spider-Man: Into the Spider-Verse. La animación es revolucionaria y la historia es emotiva. Demostró que las películas animadas pueden ser tan profundas como las de acción real.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='llorar'),
+            'usuario': Usuario.objects.get(email='juan@email.com'),
+            'contenido': 'Up me destruyó en los primeros 10 minutos. Esa secuencia de la vida de Carl y Ellie es devastadora.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='llorar'),
+            'usuario': Usuario.objects.get(email='admin@admin.com'),
+            'contenido': 'Forrest Gump siempre me hace llorar, especialmente cuando Jenny muere. Tom Hanks es increíble en esa película.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='terror'),
+            'usuario': Usuario.objects.get(email='maria@email.com'),
+            'contenido': 'Hereditary es la película más perturbadora que he visto. No puedo quitármela de la cabeza días después de verla.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='terror'),
+            'usuario': Usuario.objects.get(email='juan@email.com'),
+            'contenido': 'The Conjuring es perfecta para Halloween. Tiene sustos efectivos sin ser demasiado gore. Los Warren son personajes muy carismáticos.'
+        },
+        {
+            'tema': ForoTema.objects.get(titulo__contains='sobrevaloradas'),
+            'usuario': Usuario.objects.get(email='maria@email.com'),
+            'contenido': 'Creo que Avatar está sobrevalorada. Visualmente impresionante pero la historia es muy básica. En cambio, Blade Runner 2049 está infravalorada, es una obra maestra.'
+        }
+    ]
+    
+    for resp_data in respuestas_ejemplo:
+        respuesta, created = ForoRespuesta.objects.get_or_create(
+            tema=resp_data['tema'],
+            usuario=resp_data['usuario'],
+            contenido=resp_data['contenido']
+        )
+        if created:
+            print(f"✓ Respuesta del foro creada en: {respuesta.tema.titulo}")
     
     print("\n¡Datos de ejemplo creados exitosamente!")
     print("Puedes usar las siguientes credenciales:")

@@ -27,13 +27,17 @@ const Foro = () => {
     }
   };
 
-  const crearTema = async (e) => {
-    e.preventDefault();
+  const handleNuevoTema = () => {
     if (!currentUser) {
       showError('Debes iniciar sesión para crear temas');
+      window.location.href = '/login';
       return;
     }
-    
+    setShowModal(true);
+  };
+
+  const crearTema = async (e) => {
+    e.preventDefault();
     try {
       await axios.post('http://localhost:8000/api/foro/temas/', nuevoTema);
       setNuevoTema({ titulo: '', descripcion: '' });
@@ -69,128 +73,161 @@ const Foro = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h2>Foro de Discusión</h2>
-          <p className="text-muted">Comparte tus opiniones sobre películas y entretenimiento</p>
-        </div>
-        {currentUser ? (
+      <div className="hero-section p-4 mb-5 rounded">
+        <div className="text-center">
+          <h1 className="display-5 mb-3">💬 Comunidad BlockBuster</h1>
+          <p className="lead mb-4">
+            Únete a la conversación. Comparte tus opiniones sobre películas y descubre nuevas perspectivas.
+          </p>
           <button 
-            className="btn btn-primary"
-            onClick={() => setShowModal(true)}
+            className="btn btn-primary btn-lg"
+            onClick={handleNuevoTema}
           >
-            Nuevo Tema
+            ✨ Iniciar Nueva Discusión
           </button>
-        ) : (
-          <Link to="/login" className="btn btn-outline-primary">
-            Inicia sesión para participar
-          </Link>
-        )}
+        </div>
       </div>
 
       <div className="row">
         <div className="col-12">
           {temas.length > 0 ? (
-            <div className="list-group">
+            <div className="row g-4">
               {temas.map(tema => (
-                <Link 
-                  key={tema.id}
-                  to={`/foro/tema/${tema.id}`}
-                  className="list-group-item list-group-item-action"
-                >
-                  <div className="d-flex w-100 justify-content-between">
-                    <div className="flex-grow-1">
-                      <h5 className="mb-1">{tema.titulo}</h5>
-                      <p className="mb-1 text-muted">{tema.descripcion}</p>
-                      <small>
-                        Por <strong>{tema.usuario_nombre}</strong> • {formatearFecha(tema.fecha_creacion)}
-                      </small>
-                    </div>
-                    <div className="text-end">
-                      <span className="badge bg-primary rounded-pill mb-1">
-                        {tema.total_respuestas} respuestas
-                      </span>
-                      {tema.ultima_respuesta && (
-                        <div>
-                          <small className="text-muted">
-                            Última: {tema.ultima_respuesta.usuario}
-                            <br />
-                            {formatearFecha(tema.ultima_respuesta.fecha)}
-                          </small>
+                <div key={tema.id} className="col-12">
+                  <div className="card forum-card h-100">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between align-items-start mb-3">
+                        <div className="flex-grow-1">
+                          <Link 
+                            to={`/foro/tema/${tema.id}`}
+                            className="text-decoration-none"
+                          >
+                            <h5 className="card-title text-white mb-2 forum-title">
+                              {tema.titulo}
+                            </h5>
+                          </Link>
+                          <p className="card-text text-muted mb-2">
+                            {tema.descripcion.length > 150 
+                              ? `${tema.descripcion.substring(0, 150)}...` 
+                              : tema.descripcion}
+                          </p>
+                          <div className="d-flex align-items-center gap-3">
+                            <small className="text-muted">
+                              <span className="badge bg-secondary me-1">👤</span>
+                              <strong>{tema.usuario_nombre}</strong>
+                            </small>
+                            <small className="text-muted">
+                              <span className="badge bg-secondary me-1">📅</span>
+                              {formatearFecha(tema.fecha_creacion)}
+                            </small>
+                          </div>
                         </div>
-                      )}
+                        <div className="text-end ms-3">
+                          <div className="d-flex flex-column align-items-end gap-2">
+                            <span className="badge bg-primary fs-6 px-3 py-2">
+                              💬 {tema.total_respuestas} respuestas
+                            </span>
+                            {tema.ultima_respuesta && (
+                              <div className="text-end">
+                                <small className="text-muted d-block">
+                                  <strong>Última respuesta:</strong>
+                                </small>
+                                <small className="text-muted">
+                                  {tema.ultima_respuesta.usuario} • {formatearFecha(tema.ultima_respuesta.fecha)}
+                                </small>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex justify-content-end">
+                        <Link 
+                          to={`/foro/tema/${tema.id}`}
+                          className="btn btn-outline-primary btn-sm"
+                        >
+                          Ver Discusión →
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (
             <div className="text-center py-5">
-              <h4>No hay temas de discusión</h4>
-              <p className="text-muted">Sé el primero en iniciar una conversación</p>
-              {currentUser ? (
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => setShowModal(true)}
-                >
-                  Crear Primer Tema
-                </button>
-              ) : (
-                <Link to="/login" className="btn btn-primary">
-                  Inicia sesión para crear temas
-                </Link>
-              )}
+              <div className="card">
+                <div className="card-body py-5">
+                  <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>💭</div>
+                  <h4 className="text-white">No hay discusiones aún</h4>
+                  <p className="text-muted mb-4">Sé el primero en iniciar una conversación sobre películas</p>
+                  <button 
+                    className="btn btn-primary btn-lg"
+                    onClick={handleNuevoTema}
+                  >
+                    🚀 Crear Primera Discusión
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
 
       {showModal && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}>
+          <div className="modal-dialog modal-lg">
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Nuevo Tema de Discusión</h5>
+              <div className="modal-header border-bottom border-secondary">
+                <h5 className="modal-title text-white">✨ Nueva Discusión</h5>
                 <button 
                   type="button" 
-                  className="btn-close"
+                  className="btn-close btn-close-white"
                   onClick={() => setShowModal(false)}
                 ></button>
               </div>
               <form onSubmit={crearTema}>
                 <div className="modal-body">
-                  <div className="mb-3">
-                    <label className="form-label">Título del Tema</label>
+                  <div className="mb-4">
+                    <label className="form-label text-white">
+                      <strong>Título de la Discusión</strong>
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control form-control-lg"
+                      placeholder="¿De qué quieres hablar?"
                       value={nuevoTema.titulo}
                       onChange={(e) => setNuevoTema({...nuevoTema, titulo: e.target.value})}
                       required
                       maxLength={200}
                     />
+                    <small className="text-muted">
+                      {200 - nuevoTema.titulo.length} caracteres restantes
+                    </small>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Descripción</label>
+                    <label className="form-label text-white">
+                      <strong>Descripción</strong>
+                    </label>
                     <textarea
                       className="form-control"
-                      rows="4"
+                      rows="5"
+                      placeholder="Comparte más detalles sobre tu tema de discusión..."
                       value={nuevoTema.descripcion}
                       onChange={(e) => setNuevoTema({...nuevoTema, descripcion: e.target.value})}
                       required
                     ></textarea>
                   </div>
                 </div>
-                <div className="modal-footer">
+                <div className="modal-footer border-top border-secondary">
                   <button 
                     type="button" 
-                    className="btn btn-secondary"
+                    className="btn btn-outline-secondary"
                     onClick={() => setShowModal(false)}
                   >
                     Cancelar
                   </button>
-                  <button type="submit" className="btn btn-primary">
-                    Crear Tema
+                  <button type="submit" className="btn btn-primary btn-lg">
+                    🚀 Publicar Discusión
                   </button>
                 </div>
               </form>

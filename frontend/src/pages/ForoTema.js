@@ -45,6 +45,7 @@ const ForoTema = () => {
     e.preventDefault();
     if (!currentUser) {
       showError('Debes iniciar sesión para responder');
+      window.location.href = '/login';
       return;
     }
     if (!nuevaRespuesta.trim()) return;
@@ -127,55 +128,78 @@ const ForoTema = () => {
         </ol>
       </nav>
 
-      <div className="card mb-4">
-        <div className="card-header d-flex justify-content-between align-items-start">
-          <div>
-            <h3 className="mb-1">{tema.titulo}</h3>
-            <small className="text-muted">
-              Por <strong>{tema.usuario_nombre}</strong> • {formatearFecha(tema.fecha_creacion)}
-            </small>
+      <div className="card mb-5 forum-topic-card">
+        <div className="card-header border-bottom border-secondary p-4">
+          <div className="d-flex justify-content-between align-items-start">
+            <div className="flex-grow-1">
+              <h2 className="text-white mb-3">{tema.titulo}</h2>
+              <div className="d-flex align-items-center gap-4 mb-2">
+                <div className="d-flex align-items-center">
+                  <span className="badge bg-secondary me-2">👤</span>
+                  <strong className="text-white">{tema.usuario_nombre}</strong>
+                </div>
+                <div className="d-flex align-items-center">
+                  <span className="badge bg-secondary me-2">📅</span>
+                  <span className="text-muted">{formatearFecha(tema.fecha_creacion)}</span>
+                </div>
+                <div className="d-flex align-items-center">
+                  <span className="badge bg-primary me-2">💬</span>
+                  <span className="text-muted">{respuestas.length} respuestas</span>
+                </div>
+              </div>
+            </div>
+            {currentUser && tema.usuario === currentUser.id && (
+              <button 
+                className="btn btn-outline-danger btn-sm"
+                onClick={eliminarTema}
+              >
+                🗑️ Eliminar
+              </button>
+            )}
           </div>
-          {currentUser && tema.usuario === currentUser.id && (
-            <button 
-              className="btn btn-outline-danger btn-sm"
-              onClick={eliminarTema}
-            >
-              Eliminar Tema
-            </button>
-          )}
         </div>
-        <div className="card-body">
-          <p>{tema.descripcion}</p>
+        <div className="card-body p-4">
+          <p className="text-muted fs-5 lh-base">{tema.descripcion}</p>
         </div>
       </div>
 
-      <div className="mb-4">
-        <h5>Respuestas ({respuestas.length})</h5>
+      <div className="mb-5">
+        <div className="d-flex align-items-center justify-content-between mb-4">
+          <h4 className="text-white mb-0">
+            💬 Respuestas ({respuestas.length})
+          </h4>
+        </div>
         
-        {respuestas.map(respuesta => (
-          <div key={respuesta.id} className="card mb-3">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <strong>{respuesta.usuario_nombre}</strong>
-                  <small className="text-muted ms-2">
-                    {formatearFecha(respuesta.fecha_creacion)}
-                    {respuesta.editado && ' (editado)'}
-                  </small>
+        {respuestas.map((respuesta, index) => (
+          <div key={respuesta.id} className="card forum-response-card mb-4">
+            <div className="card-body p-4">
+              <div className="d-flex justify-content-between align-items-start mb-3">
+                <div className="d-flex align-items-center gap-3">
+                  <div className="rounded-circle bg-primary d-flex align-items-center justify-content-center" 
+                       style={{ width: '40px', height: '40px', fontSize: '16px' }}>
+                    {respuesta.usuario_nombre[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <strong className="text-white d-block">{respuesta.usuario_nombre}</strong>
+                    <small className="text-muted">
+                      {formatearFecha(respuesta.fecha_creacion)}
+                      {respuesta.editado && ' • editado'}
+                    </small>
+                  </div>
                 </div>
                 {currentUser && respuesta.usuario === currentUser.id && (
                   <div className="btn-group btn-group-sm">
                     <button 
-                      className="btn btn-outline-primary"
+                      className="btn btn-outline-primary btn-sm"
                       onClick={() => setEditandoRespuesta(respuesta.id)}
                     >
-                      Editar
+                      ✏️
                     </button>
                     <button 
-                      className="btn btn-outline-danger"
+                      className="btn btn-outline-danger btn-sm"
                       onClick={() => eliminarRespuesta(respuesta.id)}
                     >
-                      Eliminar
+                      🗑️
                     </button>
                   </div>
                 )}
@@ -188,55 +212,61 @@ const ForoTema = () => {
                   onCancel={() => setEditandoRespuesta(null)}
                 />
               ) : (
-                <p className="mb-0">{respuesta.contenido}</p>
+                <div className="response-content">
+                  <p className="text-muted mb-0 lh-base">{respuesta.contenido}</p>
+                </div>
               )}
             </div>
           </div>
         ))}
 
         {respuestas.length === 0 && (
-          <div className="text-center py-4">
-            <p className="text-muted">No hay respuestas aún. Sé el primero en responder.</p>
+          <div className="text-center py-5">
+            <div className="card">
+              <div className="card-body py-5">
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💭</div>
+                <h5 className="text-white">No hay respuestas aún</h5>
+                <p className="text-muted">Sé el primero en compartir tu opinión</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
-      {currentUser ? (
-        <div className="card">
-          <div className="card-header">
-            <h6 className="mb-0">Escribir Respuesta</h6>
-          </div>
-          <div className="card-body">
-            <form onSubmit={enviarRespuesta}>
-              <div className="mb-3">
-                <textarea
-                  className="form-control"
-                  rows="4"
-                  placeholder="Escribe tu respuesta..."
-                  value={nuevaRespuesta}
-                  onChange={(e) => setNuevaRespuesta(e.target.value)}
-                  required
-                ></textarea>
+      <div className="card forum-response-form">
+        <div className="card-header border-bottom border-secondary p-4">
+          <h5 className="mb-0 text-white">
+            ✍️ Únete a la Conversación
+          </h5>
+        </div>
+        <div className="card-body p-4">
+          <form onSubmit={enviarRespuesta}>
+            <div className="mb-4">
+              <textarea
+                className="form-control form-control-lg"
+                rows="5"
+                placeholder={currentUser ? "Comparte tu opinión..." : "Escribe tu respuesta (se te pedirá iniciar sesión al enviar)"}
+                value={nuevaRespuesta}
+                onChange={(e) => setNuevaRespuesta(e.target.value)}
+                required
+                style={{ resize: 'vertical', minHeight: '120px' }}
+              ></textarea>
+            </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                {!currentUser && (
+                  <small className="text-muted">
+                    <Link to="/login" className="text-primary text-decoration-none">Iniciar sesión</Link> o <Link to="/registro" className="text-primary text-decoration-none">registrarse</Link> para participar
+                  </small>
+                )}
               </div>
-              <button type="submit" className="btn btn-primary">
-                Enviar Respuesta
+              <button type="submit" className="btn btn-primary btn-lg px-4">
+                🚀 Publicar Respuesta
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
-      ) : (
-        <div className="card">
-          <div className="card-body text-center">
-            <p className="mb-3">Debes iniciar sesión para participar en la discusión</p>
-            <Link to="/login" className="btn btn-primary me-2">
-              Iniciar Sesión
-            </Link>
-            <Link to="/registro" className="btn btn-outline-primary">
-              Registrarse
-            </Link>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
