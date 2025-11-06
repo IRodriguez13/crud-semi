@@ -44,6 +44,7 @@ El repositorio está limpio y listo para subir a GitHub/GitLab.
 - ✅ `frontend/node_modules/` - Dependencias Node.js
 
 ### General
+### General
 - ✅ `.vscode/` - Configuración del editor (sin seguimiento)
 
 ## 📊 Estadísticas del commit:

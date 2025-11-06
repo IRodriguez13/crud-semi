@@ -9,9 +9,9 @@ const Empresa = () => {
             <div className="card-body">
               <div className="text-center mb-5 pb-5">
                 <div className="mb-4">
-                  <img 
-                    src="http://localhost:8000/static/bb_logo.png" 
-                    alt="BlockBuster Logo" 
+                  <img
+                    src="http://localhost:8000/static/bb_logo.png"
+                    alt="BlockBuster Logo"
                     className="img-fluid mb-3"
                     style={{ maxHeight: '150px', maxWidth: '300px' }}
                     onError={(e) => {
@@ -43,37 +43,37 @@ const Empresa = () => {
                   "Nunca nos fuimos"
                 </p>
                 <p className="lead text-muted mb-4">
-                  Desde 1985, fuimos el corazón de tus noches de película. Cuando las videoclubes 
+                  Desde 1985, fuimos el corazón de tus noches de película. Cuando las videoclubes
                   eran el lugar donde las familias elegían sus aventuras de fin de semana.
                 </p>
                 <p className="text-muted">
-                  Netflix y el streaming cambiaron el mundo, pero nosotros evolucionamos. 
+                  Netflix y el streaming cambiaron el mundo, pero nosotros evolucionamos.
                   Ahora regresamos combinando la nostalgia que amabas con la tecnología que necesitas.
                 </p>
               </div>
-              
+
               <div className="row mb-5 mt-5 pt-5">
                 <div className="col-md-6">
                   <div className="p-4">
                     <h3 className="text-primary mb-3">🎯 Nuestra Misión</h3>
                     <p className="lead text-muted">
-                      Revivir la magia de aquellas noches de viernes cuando elegir una película 
-                      era toda una experiencia. Combinamos la nostalgia de las videoclubes con 
+                      Revivir la magia de aquellas noches de viernes cuando elegir una película
+                      era toda una experiencia. Combinamos la nostalgia de las videoclubes con
                       la comodidad del streaming moderno, conectando generaciones a través del cine.
                     </p>
                   </div>
-                  
+
                   <div className="p-4">
                     <h3 className="text-primary mb-3">🚀 Nuestra Visión</h3>
                     <p className="text-muted">
-                      Demostrar que no fuimos solo una víctima del progreso, sino pioneros 
-                      que sabían el valor de la experiencia cinematográfica. Queremos ser 
-                      el puente entre la era dorada de las videoclubes y el futuro del 
+                      Demostrar que no fuimos solo una víctima del progreso, sino pioneros
+                      que sabían el valor de la experiencia cinematográfica. Queremos ser
+                      el puente entre la era dorada de las videoclubes y el futuro del
                       entretenimiento digital.
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="col-md-6">
                   <div className="p-4">
                     <h3 className="text-primary mb-3">💎 Nuestros Valores</h3>
@@ -122,7 +122,7 @@ const Empresa = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="row g-4 mb-5">
         <div className="col-md-4">
           <div className="card h-100 text-center feature-card">
@@ -130,8 +130,8 @@ const Empresa = () => {
               <div className="feature-icon mb-3">🎥</div>
               <h5 className="card-title text-primary">El Catálogo que Recordabas</h5>
               <p className="card-text text-muted">
-                Todas las películas que solías encontrar en nuestras estanterías, 
-                más miles de títulos nuevos. Desde los clásicos de los 80s hasta 
+                Todas las películas que solías encontrar en nuestras estanterías,
+                más miles de títulos nuevos. Desde los clásicos de los 80s hasta
                 los últimos estrenos.
               </p>
               <div className="mt-3">
@@ -143,15 +143,15 @@ const Empresa = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="col-md-4">
           <div className="card h-100 text-center feature-card">
             <div className="card-body p-4">
               <div className="feature-icon mb-3">⚡</div>
               <h5 className="card-title text-primary">Evolución Digital</h5>
               <p className="card-text text-muted">
-                De las cintas VHS a la transmisión 4K. Aprendimos, evolucionamos 
-                y ahora ofrecemos la mejor calidad sin las limitaciones físicas 
+                De las cintas VHS a la transmisión 4K. Aprendimos, evolucionamos
+                y ahora ofrecemos la mejor calidad sin las limitaciones físicas
                 del pasado.
               </p>
               <div className="mt-3">
@@ -162,14 +162,14 @@ const Empresa = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="col-md-4">
           <div className="card h-100 text-center feature-card">
             <div className="card-body p-4">
               <div className="feature-icon mb-3">🌍</div>
               <h5 className="card-title text-primary">Regreso Triunfal</h5>
               <p className="card-text text-muted">
-                Ya no necesitas venir a nosotros, ahora vamos contigo. En cada 
+                Ya no necesitas venir a nosotros, ahora vamos contigo. En cada
                 dispositivo, en cada pantalla, BlockBuster vive donde tú estés.
               </p>
               <div className="mt-3">
@@ -181,13 +181,13 @@ const Empresa = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="row">
         <div className="col-md-12">
           <div className="card contact-card">
             <div className="card-body text-center p-5">
               <h3 className="text-primary mb-5">🌐 Conecta con Nosotros</h3>
-              
+
               <div className="row g-4">
                 <div className="col-md-4">
                   <div className="contact-item p-4">
@@ -195,12 +195,12 @@ const Empresa = () => {
                     <h5 className="text-white mb-3">Nuestra Presencia</h5>
                     <p className="text-primary fs-5 fw-bold mb-2">"Ahora estamos en todos lados"</p>
                     <p className="text-muted">
-                      Desde nuestros orígenes en las calles hasta la nube digital, 
+                      Desde nuestros orígenes en las calles hasta la nube digital,
                       BlockBuster ahora vive en cada pantalla del mundo.
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="col-md-4">
                   <div className="contact-item p-4">
                     <div className="contact-icon mb-3">📞</div>
@@ -212,7 +212,7 @@ const Empresa = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="col-md-4">
                   <div className="contact-item p-4">
                     <div className="contact-icon mb-3">💌</div>
@@ -225,7 +225,7 @@ const Empresa = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-5 pt-4 border-top border-secondary">
                 <p className="text-muted mb-3">Síguenos en nuestras redes sociales</p>
                 <div className="d-flex justify-content-center gap-3">
