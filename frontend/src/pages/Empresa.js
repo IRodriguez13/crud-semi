@@ -9,25 +9,36 @@ const Empresa = () => {
             <div className="card-body">
               <div className="text-center mb-5 pb-5">
                 <div className="mb-4">
-                  <div className="blockbuster-logo mb-3" style={{
-                    background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                    color: '#000',
-                    padding: '20px 40px',
-                    borderRadius: '10px',
-                    fontFamily: 'Arial Black, sans-serif',
-                    fontSize: '2.5rem',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                    border: '3px solid #000',
-                    display: 'inline-block',
-                    transform: 'rotate(-2deg)',
-                    boxShadow: '0 8px 16px rgba(0,0,0,0.3)'
-                  }}>
-                    BLOCKBUSTER
-                  </div>
+                  <img 
+                    src="http://localhost:8000/static/bb_logo.png" 
+                    alt="BlockBuster Logo" 
+                    className="img-fluid mb-3"
+                    style={{ maxHeight: '150px', maxWidth: '300px' }}
+                    onError={(e) => {
+                      console.log('Error loading logo, using fallback');
+                      e.target.style.display = 'none';
+                      // Mostrar texto como fallback
+                      const fallback = document.createElement('div');
+                      fallback.innerHTML = 'BLOCKBUSTER';
+                      fallback.style.cssText = `
+                        background: linear-gradient(45deg, #FFD700, #FFA500);
+                        color: #000;
+                        padding: 20px 40px;
+                        border-radius: 10px;
+                        font-family: Arial Black, sans-serif;
+                        font-size: 2.5rem;
+                        font-weight: bold;
+                        text-align: center;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                        border: 3px solid #000;
+                        display: inline-block;
+                        transform: rotate(-2deg);
+                        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+                      `;
+                      e.target.parentNode.appendChild(fallback);
+                    }}
+                  />
                 </div>
-                <h1 className="display-4 text-primary mb-3">🎬 BlockBuster</h1>
                 <p className="h4 text-primary mb-4" style={{ fontStyle: 'italic' }}>
                   "Nunca nos fuimos"
                 </p>
