@@ -406,6 +406,30 @@ code {
   font-size: 2.5rem;
 }
 
+/* Mejoras para la presentación de sinopsis */
+.synopsis-container {
+  max-width: 100%;
+}
+
+.text-justify {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Mejoras para badges en detalle */
+.badge.fs-6 {
+  font-size: 0.9rem !important;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+}
+
+/* Blockquote mejorado */
+.blockquote {
+  border-left: 4px solid var(--primary-red);
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
 @media (max-width: 768px) {
   .movie-card:hover {
     transform: none;
@@ -421,5 +445,14 @@ code {
   
   .forum-response-card {
     border-left-width: 2px;
+  }
+  
+  .synopsis-container p {
+    font-size: 1rem;
+  }
+  
+  .badge.fs-6 {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.6rem;
   }
 }

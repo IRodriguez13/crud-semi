@@ -8,6 +8,25 @@ const Empresa = () => {
           <div className="card">
             <div className="card-body">
               <div className="text-center mb-5 pb-5">
+                <div className="mb-4">
+                  <div className="blockbuster-logo mb-3" style={{
+                    background: 'linear-gradient(45deg, #FFD700, #FFA500)',
+                    color: '#000',
+                    padding: '20px 40px',
+                    borderRadius: '10px',
+                    fontFamily: 'Arial Black, sans-serif',
+                    fontSize: '2.5rem',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    border: '3px solid #000',
+                    display: 'inline-block',
+                    transform: 'rotate(-2deg)',
+                    boxShadow: '0 8px 16px rgba(0,0,0,0.3)'
+                  }}>
+                    BLOCKBUSTER
+                  </div>
+                </div>
                 <h1 className="display-4 text-primary mb-3">🎬 BlockBuster</h1>
                 <p className="h4 text-primary mb-4" style={{ fontStyle: 'italic' }}>
                   "Nunca nos fuimos"

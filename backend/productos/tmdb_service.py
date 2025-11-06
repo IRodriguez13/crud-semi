@@ -1,5 +1,7 @@
 import requests
 from django.conf import settings
+from django.core.cache import cache
+import hashlib
 
 class TMDBService:
     BASE_URL = "https://api.themoviedb.org/3"
@@ -9,24 +11,44 @@ class TMDBService:
         # API Key gratuita de TMDB - en producción usar variable de entorno
         self.api_key = "3fd2be6f0c70a2a598f084ddfb75487c"  # API key pública de ejemplo
     
+    def _generate_cache_key(self, endpoint, params):
+        """Generate a unique cache key for the request"""
+        param_string = '&'.join([f"{k}={v}" for k, v in sorted(params.items())])
+        cache_string = f"tmdb_{endpoint}_{param_string}"
+        return hashlib.md5(cache_string.encode()).hexdigest()
+    
+    def _make_request(self, endpoint, params, cache_timeout=3600):
+        """Make a cached request to TMDB API"""
+        cache_key = self._generate_cache_key(endpoint, params)
+        
+        # Try to get from cache first
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return cached_data
+        
+        # Make the API request
+        url = f"{self.BASE_URL}{endpoint}"
+        try:
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            
+            # Cache the response
+            cache.set(cache_key, data, cache_timeout)
+            return data
+        except requests.RequestException as e:
+            print(f"Error en request a TMDB: {e}")
+            return None
+    
     def get_popular_movies(self, page=1):
-        url = f"{self.BASE_URL}/movie/popular"
         params = {
             'api_key': self.api_key,
             'language': 'es-ES',
             'page': page
         }
-        
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error al obtener películas populares: {e}")
-            return None
+        return self._make_request('/movie/popular', params)
     
     def get_movies_by_genre(self, genre_id, page=1):
-        url = f"{self.BASE_URL}/discover/movie"
         params = {
             'api_key': self.api_key,
             'language': 'es-ES',
@@ -34,62 +56,34 @@ class TMDBService:
             'page': page,
             'sort_by': 'popularity.desc'
         }
-        
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error al obtener películas por género: {e}")
-            return None
+        return self._make_request('/discover/movie', params)
     
     def search_movies(self, query, page=1):
-        url = f"{self.BASE_URL}/search/movie"
         params = {
             'api_key': self.api_key,
             'language': 'es-ES',
             'query': query,
             'page': page
         }
-        
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error al buscar películas: {e}")
-            return None
+        # Shorter cache for search results
+        return self._make_request('/search/movie', params, cache_timeout=1800)
     
     def get_movie_details(self, movie_id):
-        url = f"{self.BASE_URL}/movie/{movie_id}"
         params = {
             'api_key': self.api_key,
             'language': 'es-ES',
             'append_to_response': 'credits,videos'
         }
-        
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error al obtener detalles de película: {e}")
-            return None
+        # Longer cache for movie details (they rarely change)
+        return self._make_request(f'/movie/{movie_id}', params, cache_timeout=7200)
     
     def get_genres(self):
-        url = f"{self.BASE_URL}/genre/movie/list"
         params = {
             'api_key': self.api_key,
             'language': 'es-ES'
         }
-        
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error al obtener géneros: {e}")
-            return None
+        # Very long cache for genres (they rarely change)
+        return self._make_request('/genre/movie/list', params, cache_timeout=86400)
     
     def format_movie_data(self, movie_data):
         return {

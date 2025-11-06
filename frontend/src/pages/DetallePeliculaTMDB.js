@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -9,8 +9,10 @@ const DetallePeliculaTMDB = () => {
   const [pelicula, setPelicula] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showFullSynopsis, setShowFullSynopsis] = useState(false);
   const { currentUser } = useAuth();
   const { showSuccess, showError, showWarning } = useNotification();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPelicula();
@@ -94,22 +96,60 @@ const DetallePeliculaTMDB = () => {
                 )}
               </div>
               <div className="col-md-8">
+                <div className="mb-3">
+                  <button 
+                    className="btn btn-outline-light btn-sm"
+                    onClick={() => navigate('/peliculas')}
+                  >
+                    ← Volver al catálogo
+                  </button>
+                </div>
+                
                 <h1 className="display-4 mb-3">{pelicula.titulo}</h1>
-                <p className="lead mb-4">{pelicula.descripcion}</p>
-                <div className="d-flex align-items-center mb-4">
-                  <span className="badge bg-warning text-dark me-3 fs-6">
+                
+                <div className="synopsis-container mb-4">
+                  <p className="lead" style={{ 
+                    lineHeight: '1.6',
+                    fontSize: '1.1rem'
+                  }}>
+                    {showFullSynopsis || pelicula.descripcion?.length <= 200 
+                      ? pelicula.descripcion 
+                      : `${pelicula.descripcion?.substring(0, 200)}...`
+                    }
+                  </p>
+                  {pelicula.descripcion?.length > 200 && (
+                    <button 
+                      className="btn btn-link text-light p-0 text-decoration-underline"
+                      onClick={() => setShowFullSynopsis(!showFullSynopsis)}
+                    >
+                      {showFullSynopsis ? 'Ver menos' : 'Leer más'}
+                    </button>
+                  )}
+                </div>
+                
+                <div className="d-flex flex-wrap align-items-center mb-4 gap-2">
+                  <span className="badge bg-warning text-dark fs-6 px-3 py-2">
                     ⭐ {pelicula.calificacion_tmdb}/10
                   </span>
-                  <span className="badge bg-info me-3">{pelicula.año}</span>
-                  <span className="badge bg-secondary">{pelicula.duracion} min</span>
+                  <span className="badge bg-info fs-6 px-3 py-2">{pelicula.año}</span>
+                  <span className="badge bg-secondary fs-6 px-3 py-2">{pelicula.duracion} min</span>
+                  {pelicula.generos?.map((genero, index) => (
+                    <span key={index} className="badge bg-dark fs-6 px-3 py-2">
+                      {genero}
+                    </span>
+                  ))}
                 </div>
-                <div className="d-flex align-items-center">
-                  <h3 className="text-success me-4">${pelicula.precio}</h3>
+                
+                <div className="d-flex align-items-center flex-wrap gap-3">
+                  <h3 className="text-success mb-0">${pelicula.precio}</h3>
                   <button 
-                    className="btn btn-primary btn-lg"
+                    className="btn btn-primary btn-lg px-4"
                     onClick={agregarAlCarrito}
                   >
                     🛒 Agregar al Carrito
+                  </button>
+                  <button className="btn btn-outline-light btn-lg">
+                    ❤️ Favoritos
                   </button>
                 </div>
               </div>
@@ -211,12 +251,66 @@ const DetallePeliculaTMDB = () => {
         
         <div className="row mt-5">
           <div className="col-12">
-            <div className="card">
-              <div className="card-header">
-                <h4>Sinopsis Completa</h4>
+            <div className="card border-0 shadow-sm">
+              <div className="card-header border-0" style={{ background: 'var(--primary-red)' }}>
+                <h4 className="mb-0 text-white">📖 Sinopsis Completa</h4>
               </div>
-              <div className="card-body">
-                <p className="lead">{pelicula.descripcion}</p>
+              <div className="card-body" style={{ background: 'var(--card-bg)' }}>
+                <div className="row">
+                  <div className="col-md-8">
+                    <p className="fs-5 lh-lg text-justify" style={{ 
+                      textAlign: 'justify',
+                      lineHeight: '1.8',
+                      fontSize: '1.1rem',
+                      color: 'var(--text-primary)'
+                    }}>
+                      {pelicula.descripcion}
+                    </p>
+                    
+                    {pelicula.tagline && (
+                      <blockquote className="blockquote text-center mt-4">
+                        <p className="mb-0 fst-italic" style={{ color: 'var(--text-secondary)' }}>"{pelicula.tagline}"</p>
+                      </blockquote>
+                    )}
+                  </div>
+                  <div className="col-md-4">
+                    <div className="p-3 rounded shadow-sm" style={{ background: 'var(--darker-bg)', border: '1px solid #333' }}>
+                      <h6 className="fw-bold mb-3" style={{ color: 'var(--text-primary)' }}>Datos Técnicos</h6>
+                      <ul className="list-unstyled">
+                        <li className="mb-2">
+                          <strong style={{ color: 'var(--text-primary)' }}>Título original:</strong><br/>
+                          <span style={{ color: 'var(--text-secondary)' }}>{pelicula.titulo_original || pelicula.titulo}</span>
+                        </li>
+                        <li className="mb-2">
+                          <strong style={{ color: 'var(--text-primary)' }}>Idioma:</strong><br/>
+                          <span style={{ color: 'var(--text-secondary)' }}>{pelicula.idioma || 'Español'}</span>
+                        </li>
+                        <li className="mb-2">
+                          <strong style={{ color: 'var(--text-primary)' }}>País:</strong><br/>
+                          <span style={{ color: 'var(--text-secondary)' }}>{pelicula.pais || 'Estados Unidos'}</span>
+                        </li>
+                        <li className="mb-2">
+                          <strong style={{ color: 'var(--text-primary)' }}>Presupuesto:</strong><br/>
+                          <span style={{ color: 'var(--text-secondary)' }}>
+                            {pelicula.presupuesto 
+                              ? `$${pelicula.presupuesto.toLocaleString()}` 
+                              : 'No disponible'
+                            }
+                          </span>
+                        </li>
+                        <li className="mb-2">
+                          <strong style={{ color: 'var(--text-primary)' }}>Recaudación:</strong><br/>
+                          <span style={{ color: 'var(--text-secondary)' }}>
+                            {pelicula.recaudacion 
+                              ? `$${pelicula.recaudacion.toLocaleString()}` 
+                              : 'No disponible'
+                            }
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -12,6 +13,7 @@ const Peliculas = () => {
   const [busqueda, setBusqueda] = useState('');
   const { currentUser } = useAuth();
   const { showSuccess, showError, showWarning } = useNotification();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPeliculas();
@@ -128,6 +130,8 @@ const Peliculas = () => {
                     src={pelicula.imagen} 
                     className="movie-poster w-100" 
                     alt={pelicula.titulo}
+                    onClick={() => navigate(`/pelicula/tmdb/${pelicula.id}`)}
+                    style={{ cursor: 'pointer' }}
                   />
                 )}
                 <div className="position-absolute top-0 end-0 p-2">
@@ -159,7 +163,7 @@ const Peliculas = () => {
                   </button>
                   <button 
                     className="btn btn-outline-secondary btn-sm"
-                    onClick={() => window.open(`/pelicula/tmdb/${pelicula.id}`, '_blank')}
+                    onClick={() => navigate(`/pelicula/tmdb/${pelicula.id}`)}
                   >
                     Ver más
                   </button>
