@@ -14,7 +14,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proyecto.settings')
 django.setup()
 
 from usuarios.models import Usuario
-from productos.models import Categoria, Producto
+from productos.models import Genero, Pelicula
 from decimal import Decimal
 
 def create_sample_data():    
@@ -53,68 +53,101 @@ def create_sample_data():
             usuario = Usuario.objects.create_user(**user_data)
             print(f"✓ Usuario creado: {user_data['email']}")
     
-    # Crear categorías
-    categorias_ejemplo = [
-        {'nombre': 'Electrónicos', 'descripcion': 'Dispositivos electrónicos y gadgets'},
-        {'nombre': 'Ropa', 'descripcion': 'Vestimenta y accesorios'},
-        {'nombre': 'Hogar', 'descripcion': 'Artículos para el hogar'},
-        {'nombre': 'Deportes', 'descripcion': 'Equipamiento deportivo'}
+    # Crear géneros
+    generos_ejemplo = [
+        {'nombre': 'Acción', 'descripcion': 'Películas llenas de adrenalina y aventura'},
+        {'nombre': 'Comedia', 'descripcion': 'Películas divertidas y entretenidas'},
+        {'nombre': 'Drama', 'descripcion': 'Historias emotivas y profundas'},
+        {'nombre': 'Terror', 'descripcion': 'Películas de miedo y suspenso'},
+        {'nombre': 'Ciencia Ficción', 'descripcion': 'Futurismo y tecnología avanzada'},
+        {'nombre': 'Romance', 'descripcion': 'Historias de amor y relaciones'}
     ]
     
-    for cat_data in categorias_ejemplo:
-        categoria, created = Categoria.objects.get_or_create(
-            nombre=cat_data['nombre'],
-            defaults={'descripcion': cat_data['descripcion']}
+    for gen_data in generos_ejemplo:
+        genero, created = Genero.objects.get_or_create(
+            nombre=gen_data['nombre'],
+            defaults={'descripcion': gen_data['descripcion']}
         )
         if created:
-            print(f"Categoría creada: {categoria.nombre}")
+            print(f"✓ Género creado: {genero.nombre}")
     
-    # Crear productos
-    productos_ejemplo = [
+    # Crear películas
+    peliculas_ejemplo = [
         {
-            'nombre': 'Smartphone Samsung Galaxy',
-            'descripcion': 'Teléfono inteligente con pantalla AMOLED de 6.1 pulgadas',
-            'precio': Decimal('699.99'),
-            'categoria': Categoria.objects.get(nombre='Electrónicos'),
-            'stock': 25
-        },
-        {
-            'nombre': 'Laptop Dell Inspiron',
-            'descripcion': 'Laptop con procesador Intel i5, 8GB RAM, 256GB SSD',
-            'precio': Decimal('899.99'),
-            'categoria': Categoria.objects.get(nombre='Electrónicos'),
-            'stock': 15
-        },
-        {
-            'nombre': 'Camiseta Nike Dri-FIT',
-            'descripcion': 'Camiseta deportiva de alta calidad con tecnología Dri-FIT',
-            'precio': Decimal('29.99'),
-            'categoria': Categoria.objects.get(nombre='Deportes'),
+            'titulo': 'Avengers: Endgame',
+            'descripcion': 'Los Vengadores se unen para derrotar a Thanos en esta épica conclusión.',
+            'precio': Decimal('19.99'),
+            'genero': Genero.objects.get(nombre='Acción'),
+            'director': 'Anthony y Joe Russo',
+            'año': 2019,
+            'duracion': 181,
+            'calificacion': 'PG-13',
             'stock': 50
         },
         {
-            'nombre': 'Sofá 3 Plazas',
-            'descripcion': 'Sofá cómodo de 3 plazas en color gris',
-            'precio': Decimal('599.99'),
-            'categoria': Categoria.objects.get(nombre='Hogar'),
-            'stock': 8
+            'titulo': 'The Matrix',
+            'descripcion': 'Un programador descubre la verdad sobre la realidad en este clásico de ciencia ficción.',
+            'precio': Decimal('14.99'),
+            'genero': Genero.objects.get(nombre='Ciencia Ficción'),
+            'director': 'Lana y Lilly Wachowski',
+            'año': 1999,
+            'duracion': 136,
+            'calificacion': 'R',
+            'stock': 30
         },
         {
-            'nombre': 'Jeans Levi\'s 501',
-            'descripcion': 'Jeans clásicos de corte recto',
-            'precio': Decimal('79.99'),
-            'categoria': Categoria.objects.get(nombre='Ropa'),
-            'stock': 30
+            'titulo': 'Titanic',
+            'descripcion': 'Una historia de amor épica ambientada en el famoso barco.',
+            'precio': Decimal('16.99'),
+            'genero': Genero.objects.get(nombre='Romance'),
+            'director': 'James Cameron',
+            'año': 1997,
+            'duracion': 194,
+            'calificacion': 'PG-13',
+            'stock': 25
+        },
+        {
+            'titulo': 'The Hangover',
+            'descripcion': 'Cuatro amigos intentan recordar una noche loca en Las Vegas.',
+            'precio': Decimal('12.99'),
+            'genero': Genero.objects.get(nombre='Comedia'),
+            'director': 'Todd Phillips',
+            'año': 2009,
+            'duracion': 100,
+            'calificacion': 'R',
+            'stock': 40
+        },
+        {
+            'titulo': 'It',
+            'descripcion': 'Un grupo de niños enfrenta sus miedos contra un payaso malévolo.',
+            'precio': Decimal('17.99'),
+            'genero': Genero.objects.get(nombre='Terror'),
+            'director': 'Andy Muschietti',
+            'año': 2017,
+            'duracion': 135,
+            'calificacion': 'R',
+            'stock': 35
+        },
+        {
+            'titulo': 'Forrest Gump',
+            'descripcion': 'La extraordinaria vida de un hombre simple con un gran corazón.',
+            'precio': Decimal('15.99'),
+            'genero': Genero.objects.get(nombre='Drama'),
+            'director': 'Robert Zemeckis',
+            'año': 1994,
+            'duracion': 142,
+            'calificacion': 'PG-13',
+            'stock': 20
         }
     ]
     
-    for prod_data in productos_ejemplo:
-        producto, created = Producto.objects.get_or_create(
-            nombre=prod_data['nombre'],
-            defaults=prod_data
+    for pel_data in peliculas_ejemplo:
+        pelicula, created = Pelicula.objects.get_or_create(
+            titulo=pel_data['titulo'],
+            defaults=pel_data
         )
         if created:
-            print(f"✓ Producto creado: {producto.nombre}")
+            print(f"✓ Película creada: {pelicula.titulo}")
     
     print("\n¡Datos de ejemplo creados exitosamente!")
     print("Puedes usar las siguientes credenciales:")

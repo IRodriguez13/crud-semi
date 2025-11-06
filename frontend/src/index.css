@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
 }
 
 code {
@@ -14,18 +15,59 @@ code {
 
 .navbar-brand {
   font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .card {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.movie-card {
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.movie-poster {
+  height: 300px;
+  object-fit: cover;
 }
 
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #1e3a8a;
+  border-color: #1e3a8a;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #1e40af;
+  border-color: #1e40af;
+}
+
+.bg-primary {
+  background-color: #1e3a8a !important;
+}
+
+.text-primary {
+  color: #1e3a8a !important;
+}
+
+.jumbotron {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.navbar-dark .navbar-brand {
+  color: #fff !important;
+}
+
+.badge {
+  font-size: 0.75em;
 }

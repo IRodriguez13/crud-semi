@@ -6,9 +6,11 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Usuarios from './pages/Usuarios';
-import Productos from './pages/Productos';
+import Peliculas from './pages/Peliculas';
+import DetallePelicula from './pages/DetallePelicula';
+import DetallePeliculaTMDB from './pages/DetallePeliculaTMDB';
+import Carrito from './pages/Carrito';
 import Empresa from './pages/Empresa';
-import ConsultaUsuarios from './pages/ConsultaUsuarios';
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Registro />} />
               <Route path="/usuarios" element={<Usuarios />} />
-              <Route path="/productos" element={<Productos />} />
-              <Route path="/consulta-usuarios" element={<ConsultaUsuarios />} />
+              <Route path="/peliculas" element={<Peliculas />} />
+              <Route path="/pelicula/:id" element={<DetallePelicula />} />
+              <Route path="/pelicula/tmdb/:id" element={<DetallePeliculaTMDB />} />
+              <Route path="/carrito" element={<Carrito />} />
               <Route path="/empresa" element={<Empresa />} />
             </Routes>
           </div>

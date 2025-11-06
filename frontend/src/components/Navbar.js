@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
         <Link className="navbar-brand" to="/">
-          BlockBuster
+          🎬 BlockBuster
         </Link>
         
         <button 
@@ -33,7 +33,7 @@ const Navbar = () => {
               <Link className="nav-link" to="/">Inicio</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/productos">Películas</Link>
+              <Link className="nav-link" to="/peliculas">Películas</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/empresa">Nosotros</Link>
@@ -41,10 +41,10 @@ const Navbar = () => {
             {currentUser && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/usuarios">Ustedes</Link>
+                  <Link className="nav-link" to="/carrito">🛒 Carrito</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/consulta-usuarios">Preguntas</Link>
+                  <Link className="nav-link" to="/usuarios">Usuarios</Link>
                 </li>
               </>
             )}
@@ -52,23 +52,30 @@ const Navbar = () => {
           
           <ul className="navbar-nav">
             {currentUser ? (
-              <li className="nav-item dropdown">
-                <a 
-                  className="nav-link dropdown-toggle" 
-                  href="#" 
-                  role="button" 
-                  data-bs-toggle="dropdown"
-                >
-                  {currentUser.first_name || currentUser.email}
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <button className="dropdown-item" onClick={handleLogout}>
-                      Cerrar Sesión
-                    </button>
-                  </li>
-                </ul>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/carrito">
+                    🛒 <span className="badge bg-danger">0</span>
+                  </Link>
+                </li>
+                <li className="nav-item dropdown">
+                  <a 
+                    className="nav-link dropdown-toggle" 
+                    href="#" 
+                    role="button" 
+                    data-bs-toggle="dropdown"
+                  >
+                    {currentUser.first_name || currentUser.email}
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <button className="dropdown-item" onClick={handleLogout}>
+                        Cerrar Sesión
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              </>
             ) : (
               <>
                 <li className="nav-item">

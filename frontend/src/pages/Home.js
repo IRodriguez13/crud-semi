@@ -9,9 +9,9 @@ const Home = () => {
     <div className="row">
       <div className="col-md-12">
         <div className="jumbotron bg-light p-5 rounded">
-          <h1 className="display-4">Bienvenido a BlockBuster Remastered</h1>
+          <h1 className="display-4">🎬 Bienvenido a BlockBuster</h1>
           <p className="lead">
-            El mítico universo de tus películas favoritas ahora en la web! desarrollado con Django y React.
+            Tu tienda de películas favorita. Encuentra los mejores títulos y disfruta del mejor entretenimiento.
           </p>
           <hr className="my-4" />
           
@@ -22,8 +22,8 @@ const Home = () => {
               <Link className="btn btn-primary btn-lg me-3" to="/usuarios" role="button">
                 Gestionar Usuarios
               </Link>
-              <Link className="btn btn-success btn-lg" to="/productos" role="button">
-                Catálogo
+              <Link className="btn btn-success btn-lg" to="/peliculas" role="button">
+                🎬 Ver Películas
               </Link>
             </div>
           ) : (
@@ -55,11 +55,11 @@ const Home = () => {
           <div className="col-md-4">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Catálogo de Productos</h5>
+                <h5 className="card-title">🎬 Catálogo de Películas</h5>
                 <p className="card-text">
-                  Consulta nuestro catálogo completo de productos disponibles.
+                  Explora nuestra increíble colección de películas de todos los géneros.
                 </p>
-                <Link to="/productos" className="btn btn-primary">Ver Productos</Link>
+                <Link to="/peliculas" className="btn btn-primary">Ver Películas</Link>
               </div>
             </div>
           </div>
