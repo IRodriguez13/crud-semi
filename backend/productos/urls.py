@@ -21,4 +21,10 @@ urlpatterns = [
     # Comentarios
     path('peliculas/<int:pelicula_id>/comentarios/', views.comentarios_pelicula, name='comentarios-pelicula'),
     path('comentarios/<int:comentario_id>/', views.comentario_detail, name='comentario-detail'),
+    
+    # Foro
+    path('foro/temas/', views.foro_temas, name='foro-temas'),
+    path('foro/tema/<int:tema_id>/', views.foro_tema_detail, name='foro-tema-detail'),
+    path('foro/tema/<int:tema_id>/respuestas/', views.foro_respuestas, name='foro-respuestas'),
+    path('foro/respuesta/<int:respuesta_id>/', views.foro_respuesta_detail, name='foro-respuesta-detail'),
 ]

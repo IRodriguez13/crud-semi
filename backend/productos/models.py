@@ -73,3 +73,38 @@ class Comentario(models.Model):
     
     def __str__(self):
         return f"{self.usuario.username} - {self.pelicula.titulo} ({self.calificacion}/5)"
+
+class ForoTema(models.Model):
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField()
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    activo = models.BooleanField(default=True)
+    
+    class Meta:
+        ordering = ['-fecha_creacion']
+    
+    def __str__(self):
+        return self.titulo
+    
+    @property
+    def total_respuestas(self):
+        return self.respuestas.count()
+    
+    @property
+    def ultima_respuesta(self):
+        return self.respuestas.order_by('-fecha_creacion').first()
+
+class ForoRespuesta(models.Model):
+    tema = models.ForeignKey(ForoTema, related_name='respuestas', on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenido = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    editado = models.BooleanField(default=False)
+    fecha_edicion = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['fecha_creacion']
+    
+    def __str__(self):
+        return f"Respuesta de {self.usuario.username} en {self.tema.titulo}"

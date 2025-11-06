@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const DetallePeliculaTMDB = () => {
   const { id } = useParams();
@@ -9,6 +10,7 @@ const DetallePeliculaTMDB = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
+  const { showSuccess, showError, showWarning } = useNotification();
 
   useEffect(() => {
     fetchPelicula();
@@ -27,7 +29,7 @@ const DetallePeliculaTMDB = () => {
 
   const agregarAlCarrito = async () => {
     if (!currentUser) {
-      alert('Debes iniciar sesión para agregar películas al carrito');
+      showWarning('Debes iniciar sesión para agregar películas al carrito');
       return;
     }
 
@@ -39,9 +41,9 @@ const DetallePeliculaTMDB = () => {
         imagen: pelicula.imagen,
         cantidad: 1
       });
-      alert('Película agregada al carrito');
+      showSuccess(`"${pelicula.titulo}" agregada al carrito`);
     } catch (error) {
-      alert('Error al agregar película al carrito');
+      showError('Error al agregar película al carrito');
     }
   };
 

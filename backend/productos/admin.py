@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario
+from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario, ForoTema, ForoRespuesta
 
 @admin.register(Genero)
 class GeneroAdmin(admin.ModelAdmin):
@@ -28,3 +28,16 @@ class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('pelicula', 'usuario', 'calificacion', 'fecha_creacion')
     list_filter = ('calificacion', 'fecha_creacion')
     search_fields = ('pelicula__titulo', 'usuario__username', 'texto')
+
+@admin.register(ForoTema)
+class ForoTemaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'usuario', 'fecha_creacion', 'activo', 'total_respuestas')
+    list_filter = ('activo', 'fecha_creacion')
+    search_fields = ('titulo', 'descripcion', 'usuario__username')
+    readonly_fields = ('total_respuestas',)
+
+@admin.register(ForoRespuesta)
+class ForoRespuestaAdmin(admin.ModelAdmin):
+    list_display = ('tema', 'usuario', 'fecha_creacion', 'editado')
+    list_filter = ('editado', 'fecha_creacion')
+    search_fields = ('tema__titulo', 'usuario__username', 'contenido')

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Peliculas = () => {
   const [peliculas, setPeliculas] = useState([]);
@@ -10,6 +11,7 @@ const Peliculas = () => {
   const [filtroGenero, setFiltroGenero] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const { currentUser } = useAuth();
+  const { showSuccess, showError, showWarning } = useNotification();
 
   useEffect(() => {
     fetchPeliculas();
@@ -42,12 +44,11 @@ const Peliculas = () => {
 
   const agregarAlCarrito = async (pelicula) => {
     if (!currentUser) {
-      alert('Debes iniciar sesión para agregar películas al carrito');
+      showWarning('Debes iniciar sesión para agregar películas al carrito');
       return;
     }
 
     try {
-      // Para películas de TMDB, usamos un endpoint especial o creamos la película localmente
       await axios.post('http://localhost:8000/api/carrito/agregar/', {
         tmdb_id: pelicula.id,
         titulo: pelicula.titulo,
@@ -55,9 +56,9 @@ const Peliculas = () => {
         imagen: pelicula.imagen,
         cantidad: 1
       });
-      alert('Película agregada al carrito');
+      showSuccess(`"${pelicula.titulo}" agregada al carrito`);
     } catch (error) {
-      alert('Error al agregar película al carrito');
+      showError('Error al agregar película al carrito');
     }
   };
 
@@ -73,21 +74,27 @@ const Peliculas = () => {
 
   return (
     <div>
-      <div className="row mb-4">
-        <div className="col-md-12">
-          <h1 className="text-center mb-4">🎬 Catálogo de Películas BlockBuster</h1>
+      <div className="hero-section p-5 mb-5">
+        <div className="text-center">
+          <h1 className="display-4 mb-3">🎬 Catálogo BlockBuster</h1>
+          <p className="lead mb-4">Descubre miles de películas en alta definición</p>
           
-          <div className="row">
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Buscar películas..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+          <div className="row justify-content-center">
+            <div className="col-md-5">
+              <div className="input-group mb-3">
+                <span className="input-group-text bg-dark border-secondary">
+                  🔍
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Buscar películas..."
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-3">
               <select 
                 className="form-select"
                 value={filtroGenero}
@@ -111,57 +118,51 @@ const Peliculas = () => {
         </div>
       )}
 
-      <div className="row">
+      <div className="row g-4">
         {peliculas.map(pelicula => (
-          <div key={pelicula.id} className="col-md-4 col-lg-3 mb-4">
-            <div className="card h-100 movie-card">
-              {pelicula.imagen && (
-                <img 
-                  src={pelicula.imagen} 
-                  className="card-img-top movie-poster" 
-                  alt={pelicula.titulo}
-                />
-              )}
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{pelicula.titulo}</h5>
-                <p className="card-text">
-                  <small className="text-muted">
-                    {pelicula.año} • ⭐ {pelicula.calificacion}/10
-                  </small>
-                </p>
-                <p className="card-text flex-grow-1">
-                  {pelicula.descripcion.length > 100 
-                    ? `${pelicula.descripcion.substring(0, 100)}...` 
-                    : pelicula.descripcion}
+          <div key={pelicula.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div className="movie-card h-100">
+              <div className="position-relative">
+                {pelicula.imagen && (
+                  <img 
+                    src={pelicula.imagen} 
+                    className="movie-poster w-100" 
+                    alt={pelicula.titulo}
+                  />
+                )}
+                <div className="position-absolute top-0 end-0 p-2">
+                  <span className="badge bg-warning text-dark">
+                    ⭐ {pelicula.calificacion}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="card-body p-3">
+                <h6 className="card-title mb-2 text-truncate" title={pelicula.titulo}>
+                  {pelicula.titulo}
+                </h6>
+                <p className="card-text small text-muted mb-2">
+                  {pelicula.año}
                 </p>
                 
-                <div className="mt-auto">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="h5 text-success mb-0">${pelicula.precio}</span>
-                    <div>
-                      <span className="badge bg-warning text-dark me-1">
-                        ⭐ {pelicula.calificacion}
-                      </span>
-                      <span className="badge bg-success">
-                        Digital
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="d-grid gap-2">
-                    <button 
-                      className="btn btn-primary"
-                      onClick={() => agregarAlCarrito(pelicula)}
-                    >
-                      🛒 Agregar al Carrito
-                    </button>
-                    <button 
-                      className="btn btn-outline-info btn-sm"
-                      onClick={() => window.open(`/pelicula/tmdb/${pelicula.id}`, '_blank')}
-                    >
-                      Ver Detalles
-                    </button>
-                  </div>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <span className="h6 text-success mb-0">${pelicula.precio}</span>
+                  <span className="badge bg-success small">HD</span>
+                </div>
+                
+                <div className="d-grid gap-1">
+                  <button 
+                    className="btn btn-primary btn-sm"
+                    onClick={() => agregarAlCarrito(pelicula)}
+                  >
+                    + Carrito
+                  </button>
+                  <button 
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => window.open(`/pelicula/tmdb/${pelicula.id}`, '_blank')}
+                  >
+                    Ver más
+                  </button>
                 </div>
               </div>
             </div>

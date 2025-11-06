@@ -1,11 +1,10 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f9fa;
+  background-color: #141414;
+  color: #ffffff;
 }
 
 code {
@@ -13,61 +12,286 @@ code {
     monospace;
 }
 
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.5rem;
+/* Netflix-inspired color palette */
+:root {
+  --primary-red: #e50914;
+  --dark-red: #b20710;
+  --dark-bg: #141414;
+  --darker-bg: #0f0f0f;
+  --card-bg: #1f1f1f;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #808080;
+  --success: #46d369;
+  --warning: #f5c518;
 }
 
+/* Navbar */
+.navbar-dark {
+  background-color: var(--darker-bg) !important;
+  border-bottom: 1px solid #333;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.8rem;
+  color: var(--primary-red) !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.navbar-nav .nav-link {
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--text-secondary) !important;
+}
+
+/* Cards */
 .card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  background-color: var(--card-bg);
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
+.card-body {
+  color: var(--text-primary);
+}
+
+.card-title {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.card-text {
+  color: var(--text-secondary);
+}
+
+/* Movie Cards */
 .movie-card {
-  transition: all 0.3s ease;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
 }
 
 .movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 }
 
 .movie-poster {
-  height: 300px;
+  height: 350px;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
+.movie-card:hover .movie-poster {
+  transform: scale(1.1);
+}
+
+/* Buttons */
 .btn-primary {
-  background-color: #1e3a8a;
-  border-color: #1e3a8a;
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  background-color: #1e40af;
-  border-color: #1e40af;
+  background-color: var(--dark-red);
+  border-color: var(--dark-red);
+  transform: translateY(-1px);
 }
 
-.bg-primary {
-  background-color: #1e3a8a !important;
+.btn-outline-primary {
+  color: var(--primary-red);
+  border-color: var(--primary-red);
 }
 
-.text-primary {
-  color: #1e3a8a !important;
+.btn-outline-primary:hover {
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+}
+
+.btn-success {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.9));
+  border-radius: 12px;
+  margin-bottom: 2rem;
 }
 
 .jumbotron {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--darker-bg) 0%, var(--card-bg) 100%);
+  color: var(--text-primary);
+  border-radius: 12px;
+  border: 1px solid #333;
 }
 
-.navbar-dark .navbar-brand {
-  color: #fff !important;
-}
-
+/* Badges */
 .badge {
-  font-size: 0.75em;
+  font-size: 0.8em;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.badge.bg-warning {
+  background-color: var(--warning) !important;
+  color: #000;
+}
+
+.badge.bg-success {
+  background-color: var(--success) !important;
+}
+
+/* Forms */
+.form-control {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+  color: var(--text-primary);
+  border-radius: 6px;
+}
+
+.form-control:focus {
+  background-color: var(--card-bg);
+  border-color: var(--primary-red);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+}
+
+.form-select {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+  color: var(--text-primary);
+}
+
+.form-select:focus {
+  background-color: var(--card-bg);
+  border-color: var(--primary-red);
+  color: var(--text-primary);
+}
+
+/* Alerts/Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+  color: var(--text-primary);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.toast-success {
+  border-left: 4px solid var(--success);
+}
+
+.toast-error {
+  border-left: 4px solid var(--primary-red);
+}
+
+.toast-warning {
+  border-left: 4px solid var(--warning);
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+  background-color: var(--darker-bg);
+  color: var(--text-primary);
+}
+
+/* Spinner */
+.spinner-border {
+  color: var(--primary-red);
+}
+
+/* Text colors */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-success {
+  color: var(--success) !important;
+}
+
+.text-primary {
+  color: var(--primary-red) !important;
+}
+
+/* Container adjustments */
+.container {
+  max-width: 1400px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--darker-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .movie-card:hover {
+    transform: none;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
 }

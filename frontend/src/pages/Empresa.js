@@ -93,21 +93,21 @@ const Empresa = () => {
       
       <div className="row mt-4">
         <div className="col-md-12">
-          <div className="card bg-light">
+          <div className="card">
             <div className="card-body text-center">
-              <h3>📞 Contacto</h3>
+              <h3 className="text-primary mb-4">📞 Contacto</h3>
               <div className="row">
                 <div className="col-md-4">
-                  <h5>🏢 Dirección</h5>
-                  <p>Av. Hollywood #1990<br />Los Ángeles, CA</p>
+                  <h5 className="text-white">🏢 Dirección</h5>
+                  <p className="text-muted">Av. Hollywood #1990<br />Los Ángeles, CA</p>
                 </div>
                 <div className="col-md-4">
-                  <h5>📱 Teléfono</h5>
-                  <p>+1 (555) BLOCKBUSTER</p>
+                  <h5 className="text-white">📱 Teléfono</h5>
+                  <p className="text-muted">+1 (555) BLOCKBUSTER</p>
                 </div>
                 <div className="col-md-4">
-                  <h5>📧 Email</h5>
-                  <p>info@blockbuster.com</p>
+                  <h5 className="text-white">📧 Email</h5>
+                  <p className="text-muted">info@blockbuster.com</p>
                 </div>
               </div>
             </div>

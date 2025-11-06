@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Carrito = () => {
   const [carrito, setCarrito] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
+  const { showSuccess, showError } = useNotification();
 
   useEffect(() => {
     if (currentUser) {
@@ -31,19 +33,19 @@ const Carrito = () => {
         cantidad: nuevaCantidad
       });
       fetchCarrito();
+      showSuccess('Cantidad actualizada');
     } catch (error) {
-      alert('Error al actualizar cantidad');
+      showError('Error al actualizar cantidad');
     }
   };
 
-  const eliminarItem = async (itemId) => {
-    if (window.confirm('¿Estás seguro de eliminar esta película del carrito?')) {
-      try {
-        await axios.delete(`http://localhost:8000/api/carrito/item/${itemId}/eliminar/`);
-        fetchCarrito();
-      } catch (error) {
-        alert('Error al eliminar item');
-      }
+  const eliminarItem = async (itemId, titulo) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/carrito/item/${itemId}/eliminar/`);
+      fetchCarrito();
+      showSuccess(`"${titulo}" eliminada del carrito`);
+    } catch (error) {
+      showError('Error al eliminar película');
     }
   };
 
@@ -129,7 +131,7 @@ const Carrito = () => {
                     <div className="col-md-1">
                       <button 
                         className="btn btn-outline-danger btn-sm"
-                        onClick={() => eliminarItem(item.id)}
+                        onClick={() => eliminarItem(item.id, item.pelicula_titulo)}
                       >
                         🗑️
                       </button>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const Registro = () => {
   
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
 
   const handleChange = (e) => {
     setFormData({
@@ -34,10 +36,12 @@ const Registro = () => {
     const result = await register(formData);
     
     if (result.success) {
-      alert('Usuario registrado exitosamente. Ahora puedes iniciar sesión.');
+      showSuccess('¡Registro exitoso! Ahora puedes iniciar sesión.');
       navigate('/login');
     } else {
-      setError(result.error.email?.[0] || result.error.username?.[0] || 'Error al registrar usuario');
+      const errorMsg = result.error.email?.[0] || result.error.username?.[0] || 'Error al registrar usuario';
+      setError(errorMsg);
+      showError(errorMsg);
     }
     
     setLoading(false);

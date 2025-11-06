@@ -8,56 +8,64 @@ const Home = () => {
   return (
     <div className="row">
       <div className="col-md-12">
-        <div className="jumbotron bg-light p-5 rounded">
-          <h1 className="display-4">🎬 Bienvenido a BlockBuster</h1>
-          <p className="lead">
-            Tu tienda de películas favorita. Encuentra los mejores títulos y disfruta del mejor entretenimiento.
+        <div className="hero-section p-5 rounded text-center">
+          <h1 className="display-3 mb-2">🎬 BlockBuster</h1>
+          <p className="h4 text-primary mb-4" style={{ fontStyle: 'italic' }}>
+            "Nunca nos fuimos"
           </p>
-          <hr className="my-4" />
+          <p className="lead mb-4">
+            La experiencia cinematográfica que siempre quisiste. Miles de películas en alta definición.
+          </p>
           
           {currentUser ? (
             <div>
-              <p>¡Hola {currentUser.first_name || currentUser.email}!</p>
-              <p>Puedes acceder a todas las funcionalidades del sistema.</p>
-              <Link className="btn btn-primary btn-lg me-3" to="/usuarios" role="button">
-                Gestionar Usuarios
-              </Link>
-              <Link className="btn btn-success btn-lg" to="/peliculas" role="button">
-                🎬 Ver Películas
-              </Link>
+              <h4 className="mb-4">¡Hola {currentUser.first_name || currentUser.email}!</h4>
+              <p className="mb-4">Explora nuestro catálogo y disfruta del mejor entretenimiento</p>
+              <div className="d-flex gap-3 justify-content-center flex-wrap">
+                <Link className="btn btn-primary btn-lg" to="/peliculas">
+                  🎬 Explorar Catálogo
+                </Link>
+                <Link className="btn btn-outline-light btn-lg" to="/carrito">
+                  🛒 Mi Carrito
+                </Link>
+              </div>
             </div>
           ) : (
             <div>
-              <p>Para acceder a todas las funcionalidades, inicia sesión o regístrate.</p>
-              <Link className="btn btn-primary btn-lg me-3" to="/login" role="button">
-                Iniciar Sesión
-              </Link>
-              <Link className="btn btn-success btn-lg" to="/registro" role="button">
-                Registrarse
-              </Link>
+              <p className="mb-4">Únete a millones de usuarios que ya disfrutan de BlockBuster</p>
+              <div className="d-flex gap-3 justify-content-center flex-wrap">
+                <Link className="btn btn-primary btn-lg" to="/registro">
+                  Comenzar Gratis
+                </Link>
+                <Link className="btn btn-outline-light btn-lg" to="/login">
+                  Iniciar Sesión
+                </Link>
+              </div>
             </div>
           )}
         </div>
         
-        <div className="row mt-5">
+        <div className="row g-4 mt-4">
           <div className="col-md-4">
-            <div className="card">
+            <div className="card h-100 text-center">
               <div className="card-body">
-                <h5 className="card-title">Gestión de Usuarios</h5>
+                <div className="mb-3" style={{ fontSize: '3rem' }}>🎬</div>
+                <h5 className="card-title">Catálogo Extenso</h5>
                 <p className="card-text">
-                  Registro, consulta y administración completa de usuarios del sistema.
+                  Miles de películas de todos los géneros y épocas. Desde clásicos hasta los últimos estrenos.
                 </p>
-                <Link to="/usuarios" className="btn btn-primary">Ver Usuarios</Link>
+                <Link to="/peliculas" className="btn btn-primary">Explorar Ahora</Link>
               </div>
             </div>
           </div>
           
           <div className="col-md-4">
-            <div className="card">
+            <div className="card h-100 text-center">
               <div className="card-body">
-                <h5 className="card-title">🎬 Catálogo de Películas</h5>
+                <div className="mb-3" style={{ fontSize: '3rem' }}>⚡</div>
+                <h5 className="card-title">Acceso Instantáneo</h5>
                 <p className="card-text">
-                  Explora nuestra increíble colección de películas de todos los géneros.
+                  Disfruta de tus películas favoritas al instante. Sin esperas, sin descargas.
                 </p>
                 <Link to="/peliculas" className="btn btn-primary">Ver Películas</Link>
               </div>
@@ -65,11 +73,12 @@ const Home = () => {
           </div>
           
           <div className="col-md-4">
-            <div className="card">
+            <div className="card h-100 text-center">
               <div className="card-body">
-                <h5 className="card-title">Acerca de Nosotros</h5>
+                <div className="mb-3" style={{ fontSize: '3rem' }}>🏆</div>
+                <h5 className="card-title">Calidad Premium</h5>
                 <p className="card-text">
-                  Conoce más sobre nuestra empresa y nuestros servicios.
+                  Experiencia cinematográfica en alta definición con el mejor sonido y imagen.
                 </p>
                 <Link to="/empresa" className="btn btn-primary">Conocer Más</Link>
               </div>

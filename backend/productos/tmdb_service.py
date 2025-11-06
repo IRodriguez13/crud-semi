@@ -10,7 +10,6 @@ class TMDBService:
         self.api_key = "3fd2be6f0c70a2a598f084ddfb75487c"  # API key pública de ejemplo
     
     def get_popular_movies(self, page=1):
-        """Obtiene películas populares"""
         url = f"{self.BASE_URL}/movie/popular"
         params = {
             'api_key': self.api_key,
@@ -27,7 +26,6 @@ class TMDBService:
             return None
     
     def get_movies_by_genre(self, genre_id, page=1):
-        """Obtiene películas por género"""
         url = f"{self.BASE_URL}/discover/movie"
         params = {
             'api_key': self.api_key,
@@ -46,7 +44,6 @@ class TMDBService:
             return None
     
     def search_movies(self, query, page=1):
-        """Busca películas por título"""
         url = f"{self.BASE_URL}/search/movie"
         params = {
             'api_key': self.api_key,
@@ -64,7 +61,6 @@ class TMDBService:
             return None
     
     def get_movie_details(self, movie_id):
-        """Obtiene detalles de una película específica"""
         url = f"{self.BASE_URL}/movie/{movie_id}"
         params = {
             'api_key': self.api_key,
@@ -81,7 +77,6 @@ class TMDBService:
             return None
     
     def get_genres(self):
-        """Obtiene lista de géneros"""
         url = f"{self.BASE_URL}/genre/movie/list"
         params = {
             'api_key': self.api_key,
@@ -97,7 +92,6 @@ class TMDBService:
             return None
     
     def format_movie_data(self, movie_data):
-        """Formatea los datos de película de TMDB para nuestro sistema"""
         return {
             'id': movie_data.get('id'),
             'titulo': movie_data.get('title', 'Sin título'),
@@ -109,11 +103,10 @@ class TMDBService:
             'generos': movie_data.get('genre_ids', []),
             'popularidad': movie_data.get('popularity', 0),
             'precio': self.calculate_price(movie_data.get('vote_average', 0)),
-            'stock': 99  # Stock virtual para películas digitales
+            'stock': 99
         }
     
     def calculate_price(self, rating):
-        """Calcula precio basado en la calificación"""
         if rating >= 8.0:
             return 19.99
         elif rating >= 7.0:

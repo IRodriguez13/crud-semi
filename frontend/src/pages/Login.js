@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Login = () => {
   
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
 
   const handleChange = (e) => {
     setFormData({
@@ -28,9 +30,12 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
+      showSuccess('¡Bienvenido a BlockBuster!');
       navigate('/');
     } else {
-      setError(result.error.non_field_errors?.[0] || 'Error al iniciar sesión');
+      const errorMsg = result.error.non_field_errors?.[0] || 'Error al iniciar sesión';
+      setError(errorMsg);
+      showError(errorMsg);
     }
     
     setLoading(false);

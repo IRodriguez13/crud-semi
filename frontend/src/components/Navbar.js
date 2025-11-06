@@ -36,17 +36,15 @@ const Navbar = () => {
               <Link className="nav-link" to="/peliculas">Películas</Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/foro">Ustedes</Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link" to="/empresa">Nosotros</Link>
             </li>
             {currentUser && (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/carrito">🛒 Carrito</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/usuarios">Usuarios</Link>
-                </li>
-              </>
+              <li className="nav-item">
+                <Link className="nav-link" to="/usuarios">Usuarios</Link>
+              </li>
             )}
           </ul>
           
@@ -54,23 +52,36 @@ const Navbar = () => {
             {currentUser ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/carrito">
-                    🛒 <span className="badge bg-danger">0</span>
+                  <Link className="nav-link position-relative" to="/carrito">
+                    🛒 Carrito
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      0
+                    </span>
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <a 
-                    className="nav-link dropdown-toggle" 
+                    className="nav-link dropdown-toggle d-flex align-items-center" 
                     href="#" 
                     role="button" 
                     data-bs-toggle="dropdown"
                   >
-                    {currentUser.first_name || currentUser.email}
+                    <div className="rounded-circle bg-primary d-flex align-items-center justify-content-center me-2" 
+                         style={{ width: '32px', height: '32px', fontSize: '14px' }}>
+                      {(currentUser.first_name?.[0] || currentUser.email[0]).toUpperCase()}
+                    </div>
+                    {currentUser.first_name || currentUser.username}
                   </a>
-                  <ul className="dropdown-menu">
+                  <ul className="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <Link className="dropdown-item" to="/usuarios">
+                        👥 Usuarios
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
                     <li>
                       <button className="dropdown-item" onClick={handleLogout}>
-                        Cerrar Sesión
+                        🚪 Cerrar Sesión
                       </button>
                     </li>
                   </ul>
@@ -82,7 +93,9 @@ const Navbar = () => {
                   <Link className="nav-link" to="/login">Ingresar</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/registro">Registrarse</Link>
+                  <Link className="nav-link btn btn-primary text-white ms-2 px-3" to="/registro">
+                    Registrarse
+                  </Link>
                 </li>
               </>
             )}

@@ -3,8 +3,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario
-from .serializers import PeliculaSerializer, GeneroSerializer, CarritoSerializer, ItemCarritoSerializer, ComentarioSerializer
+from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario, ForoTema, ForoRespuesta
+from .serializers import (PeliculaSerializer, GeneroSerializer, CarritoSerializer, 
+                         ItemCarritoSerializer, ComentarioSerializer, ForoTemaSerializer, ForoRespuestaSerializer)
 from .tmdb_service import TMDBService
 
 class PeliculaListView(generics.ListAPIView):
@@ -242,3 +243,89 @@ def comentario_detail(request, comentario_id):
     elif request.method == 'DELETE':
         comentario.delete()
         return Response({'message': 'Comentario eliminado'})
+
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def foro_temas(request):
+    if request.method == 'GET':
+        temas = ForoTema.objects.filter(activo=True)
+        serializer = ForoTemaSerializer(temas, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'error': 'Debes iniciar sesión para crear temas'}, 
+                          status=status.HTTP_401_UNAUTHORIZED)
+        
+        serializer = ForoTemaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(usuario=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
+def foro_tema_detail(request, tema_id):
+    tema = get_object_or_404(ForoTema, id=tema_id, activo=True)
+    
+    if request.method == 'GET':
+        serializer = ForoTemaSerializer(tema)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        if not request.user.is_authenticated or tema.usuario != request.user:
+            return Response({'error': 'No tienes permisos'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = ForoTemaSerializer(tema, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        if not request.user.is_authenticated or tema.usuario != request.user:
+            return Response({'error': 'No tienes permisos'}, status=status.HTTP_403_FORBIDDEN)
+        
+        tema.activo = False
+        tema.save()
+        return Response({'message': 'Tema eliminado'})
+
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def foro_respuestas(request, tema_id):
+    tema = get_object_or_404(ForoTema, id=tema_id, activo=True)
+    
+    if request.method == 'GET':
+        respuestas = tema.respuestas.all()
+        serializer = ForoRespuestaSerializer(respuestas, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'error': 'Debes iniciar sesión para responder'}, 
+                          status=status.HTTP_401_UNAUTHORIZED)
+        
+        serializer = ForoRespuestaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(usuario=request.user, tema=tema)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def foro_respuesta_detail(request, respuesta_id):
+    respuesta = get_object_or_404(ForoRespuesta, id=respuesta_id, usuario=request.user)
+    
+    if request.method == 'PUT':
+        serializer = ForoRespuestaSerializer(respuesta, data=request.data, partial=True)
+        if serializer.is_valid():
+            from django.utils import timezone
+            respuesta.editado = True
+            respuesta.fecha_edicion = timezone.now()
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        respuesta.delete()
+        return Response({'message': 'Respuesta eliminada'})

@@ -1,15 +1,8 @@
 #!/usr/bin/env python
-"""
-Script para crear datos de ejemplo en la base de datos
-Ejecutar después de hacer las migraciones
-
-Dummy data para la BBDD.
-"""
 import os
 import sys
 import django
 
-# Configurar Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proyecto.settings')
 django.setup()
 
@@ -17,8 +10,9 @@ from usuarios.models import Usuario
 from productos.models import Genero, Pelicula
 from decimal import Decimal
 
-def create_sample_data():    
-    # Crear superusuario si no existe
+def create_sample_data():
+    print("Creando datos de ejemplo...")
+    
     if not Usuario.objects.filter(email='admin@admin.com').exists():
         admin = Usuario.objects.create_superuser(
             username='admin',
@@ -27,8 +21,7 @@ def create_sample_data():
             first_name='Administrador',
             last_name='Sistema'
         )
-    
-    # Crear usuarios de ejemplo
+        print("✓ Superusuario creado: admin@admin.com / admin123")
     usuarios_ejemplo = [
         {
             'username': 'juan_perez',
@@ -52,8 +45,6 @@ def create_sample_data():
         if not Usuario.objects.filter(email=user_data['email']).exists():
             usuario = Usuario.objects.create_user(**user_data)
             print(f"✓ Usuario creado: {user_data['email']}")
-    
-    # Crear géneros
     generos_ejemplo = [
         {'nombre': 'Acción', 'descripcion': 'Películas llenas de adrenalina y aventura'},
         {'nombre': 'Comedia', 'descripcion': 'Películas divertidas y entretenidas'},
@@ -70,8 +61,6 @@ def create_sample_data():
         )
         if created:
             print(f"✓ Género creado: {genero.nombre}")
-    
-    # Crear películas
     peliculas_ejemplo = [
         {
             'titulo': 'Avengers: Endgame',

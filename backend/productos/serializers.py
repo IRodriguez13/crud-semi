@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario
+from .models import Pelicula, Genero, Carrito, ItemCarrito, Comentario, ForoTema, ForoRespuesta
 
 class GeneroSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,3 +53,31 @@ class CarritoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carrito
         fields = ['id', 'usuario', 'items', 'total', 'cantidad_items', 'fecha_creacion', 'fecha_actualizacion']
+
+class ForoRespuestaSerializer(serializers.ModelSerializer):
+    usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
+    
+    class Meta:
+        model = ForoRespuesta
+        fields = ['id', 'tema', 'usuario', 'usuario_nombre', 'contenido', 'fecha_creacion', 'editado', 'fecha_edicion']
+        read_only_fields = ['usuario', 'editado', 'fecha_edicion']
+
+class ForoTemaSerializer(serializers.ModelSerializer):
+    usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
+    total_respuestas = serializers.ReadOnlyField()
+    ultima_respuesta = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ForoTema
+        fields = ['id', 'titulo', 'descripcion', 'usuario', 'usuario_nombre', 'fecha_creacion', 
+                 'activo', 'total_respuestas', 'ultima_respuesta']
+        read_only_fields = ['usuario']
+    
+    def get_ultima_respuesta(self, obj):
+        ultima = obj.ultima_respuesta
+        if ultima:
+            return {
+                'usuario': ultima.usuario.username,
+                'fecha': ultima.fecha_creacion
+            }
+        return None
