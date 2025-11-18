@@ -1,0 +1,75 @@
+
+ INSTRUCCIONES RÁPIDAS PARA WINDOWS
+====================================
+
+1️⃣ PRERREQUISITOS (Instalar ANTES):
+   - Python 3.8+ desde https://python.org
+     ⚠️ IMPORTANTE: Marcar "Add Python to PATH" durante instalación
+   - Node.js 16+ desde https://nodejs.org
+
+2️⃣ INSTALACIÓN:
+   Opción A (Automática - Recomendada):
+   - Ejecutar: setup_windows.bat
+   - Esperar a que termine (puede tardar varios minutos)
+   
+   Opción B (Manual):
+   - Seguir instrucciones en: INSTALACION_WINDOWS.md
+
+3️⃣ EJECUTAR:
+   - Ejecutar: run_windows.bat
+   - O seguir instrucciones manuales en INSTALACION_WINDOWS.md
+
+4️⃣ ACCEDER:
+   - Frontend: http://localhost:3000
+   - Backend: http://localhost:8000
+   - Admin: http://localhost:8000/admin
+
+
+🔐 CREDENCIALES DE PRUEBA
+==========================
+
+Administrador:
+  Email: admin@admin.com
+  Password: admin123
+
+Usuarios:
+  Email: juan@email.com
+  Password: password123
+  
+  Email: maria@email.com
+  Password: password123
+
+
+📚 DOCUMENTACIÓN COMPLETA
+==========================
+
+Para instrucciones detalladas paso a paso, ver:
+- INSTALACION_WINDOWS.md (Guía completa Windows)
+- README.md (Documentación general del proyecto)
+- WINDOWS_SETUP.md (Guía adicional)
+
+
+❓ PROBLEMAS COMUNES
+====================
+
+Si tienes errores, revisa la sección "Solución de Problemas" 
+en INSTALACION_WINDOWS.md
+
+Errores más comunes:
+- "python no se reconoce": Reinstalar Python con "Add to PATH"
+- Puerto ocupado: Cambiar puertos en los scripts
+- "ModuleNotFoundError": Activar entorno virtual primero
+
+
+📞 ESTRUCTURA DEL PROYECTO
+==========================
+
+backend/          - Servidor Django (Python)
+frontend/         - Aplicación React (JavaScript)
+scripts .bat      - Scripts de instalación y ejecución
+documentación/    - Guías y manuales
+
+
+✨ ¡Disfruta de BlockBuster! 🎬
+
+

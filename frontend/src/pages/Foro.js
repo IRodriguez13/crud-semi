@@ -38,6 +38,12 @@ const Foro = () => {
 
   const crearTema = async (e) => {
     e.preventDefault();
+    if (!currentUser) {
+      showError('Debes iniciar sesión para crear temas');
+      setShowModal(false);
+      window.location.href = '/login';
+      return;
+    }
     try {
       await axios.post('http://localhost:8000/api/foro/temas/', nuevoTema);
       setNuevoTema({ titulo: '', descripcion: '' });
@@ -45,7 +51,11 @@ const Foro = () => {
       fetchTemas();
       showSuccess('Tema creado exitosamente');
     } catch (error) {
-      showError('Error al crear tema');
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al crear tema';
+      showError(errorMessage);
+      if (error.response?.status === 401) {
+        window.location.href = '/login';
+      }
     }
   };
 

@@ -12,6 +12,8 @@ const ForoTema = () => {
   const [loading, setLoading] = useState(true);
   const [nuevaRespuesta, setNuevaRespuesta] = useState('');
   const [editandoRespuesta, setEditandoRespuesta] = useState(null);
+  const [editandoTema, setEditandoTema] = useState(false);
+  const [temaEditado, setTemaEditado] = useState({ titulo: '', descripcion: '' });
   const { currentUser } = useAuth();
   const { showSuccess, showError } = useNotification();
 
@@ -58,7 +60,11 @@ const ForoTema = () => {
       fetchRespuestas();
       showSuccess('Respuesta enviada');
     } catch (error) {
-      showError('Error al enviar respuesta');
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al enviar respuesta';
+      showError(errorMessage);
+      if (error.response?.status === 401) {
+        window.location.href = '/login';
+      }
     }
   };
 
@@ -71,27 +77,84 @@ const ForoTema = () => {
       fetchRespuestas();
       showSuccess('Respuesta actualizada');
     } catch (error) {
-      showError('Error al editar respuesta');
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al editar respuesta';
+      showError(errorMessage);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        setEditandoRespuesta(null);
+        if (error.response?.status === 401) {
+          window.location.href = '/login';
+        }
+      }
     }
   };
 
   const eliminarRespuesta = async (respuestaId) => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar esta respuesta?')) {
+      return;
+    }
     try {
       await axios.delete(`http://localhost:8000/api/foro/respuesta/${respuestaId}/`);
       fetchRespuestas();
       showSuccess('Respuesta eliminada');
     } catch (error) {
-      showError('Error al eliminar respuesta');
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al eliminar respuesta';
+      showError(errorMessage);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        if (error.response?.status === 401) {
+          window.location.href = '/login';
+        }
+      }
     }
   };
 
   const eliminarTema = async () => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este tema?')) {
+      return;
+    }
     try {
       await axios.delete(`http://localhost:8000/api/foro/tema/${id}/`);
       showSuccess('Tema eliminado');
       navigate('/foro');
     } catch (error) {
-      showError('Error al eliminar tema');
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al eliminar tema';
+      showError(errorMessage);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        if (error.response?.status === 401) {
+          window.location.href = '/login';
+        }
+      }
+    }
+  };
+
+  const iniciarEdicionTema = () => {
+    setTemaEditado({
+      titulo: tema.titulo,
+      descripcion: tema.descripcion
+    });
+    setEditandoTema(true);
+  };
+
+  const cancelarEdicionTema = () => {
+    setEditandoTema(false);
+    setTemaEditado({ titulo: '', descripcion: '' });
+  };
+
+  const guardarEdicionTema = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(`http://localhost:8000/api/foro/tema/${id}/`, temaEditado);
+      setTema(response.data);
+      setEditandoTema(false);
+      showSuccess('Tema actualizado');
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al actualizar tema';
+      showError(errorMessage);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        setEditandoTema(false);
+        if (error.response?.status === 401) {
+          window.location.href = '/login';
+        }
+      }
     }
   };
 
@@ -132,35 +195,83 @@ const ForoTema = () => {
         <div className="card-header border-bottom border-secondary p-4">
           <div className="d-flex justify-content-between align-items-start">
             <div className="flex-grow-1">
-              <h2 className="text-white mb-3">{tema.titulo}</h2>
-              <div className="d-flex align-items-center gap-4 mb-2">
-                <div className="d-flex align-items-center">
-                  <span className="badge bg-secondary me-2">👤</span>
-                  <strong className="text-white">{tema.usuario_nombre}</strong>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="badge bg-secondary me-2">📅</span>
-                  <span className="text-muted">{formatearFecha(tema.fecha_creacion)}</span>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="badge bg-primary me-2">💬</span>
-                  <span className="text-muted">{respuestas.length} respuestas</span>
-                </div>
-              </div>
+              {editandoTema ? (
+                <form onSubmit={guardarEdicionTema}>
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      value={temaEditado.titulo}
+                      onChange={(e) => setTemaEditado({...temaEditado, titulo: e.target.value})}
+                      required
+                      maxLength={200}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <textarea
+                      className="form-control"
+                      rows="4"
+                      value={temaEditado.descripcion}
+                      onChange={(e) => setTemaEditado({...temaEditado, descripcion: e.target.value})}
+                      required
+                    ></textarea>
+                  </div>
+                  <div className="btn-group">
+                    <button type="submit" className="btn btn-success btn-sm">
+                      💾 Guardar
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary btn-sm"
+                      onClick={cancelarEdicionTema}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <h2 className="text-white mb-3">{tema.titulo}</h2>
+                  <div className="d-flex align-items-center gap-4 mb-2">
+                    <div className="d-flex align-items-center">
+                      <span className="badge bg-secondary me-2">👤</span>
+                      <strong className="text-white">{tema.usuario_nombre}</strong>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <span className="badge bg-secondary me-2">📅</span>
+                      <span className="text-muted">{formatearFecha(tema.fecha_creacion)}</span>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <span className="badge bg-primary me-2">💬</span>
+                      <span className="text-muted">{respuestas.length} respuestas</span>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-            {currentUser && tema.usuario === currentUser.id && (
-              <button 
-                className="btn btn-outline-danger btn-sm"
-                onClick={eliminarTema}
-              >
-                🗑️ Eliminar
-              </button>
+            {currentUser && tema.usuario === currentUser.id && !editandoTema && (
+              <div className="btn-group btn-group-sm">
+                <button 
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={iniciarEdicionTema}
+                >
+                  ✏️ Editar
+                </button>
+                <button 
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={eliminarTema}
+                >
+                  🗑️ Eliminar
+                </button>
+              </div>
             )}
           </div>
         </div>
-        <div className="card-body p-4">
-          <p className="text-muted fs-5 lh-base">{tema.descripcion}</p>
-        </div>
+        {!editandoTema && (
+          <div className="card-body p-4">
+            <p className="text-muted fs-5 lh-base">{tema.descripcion}</p>
+          </div>
+        )}
       </div>
 
       <div className="mb-5">
