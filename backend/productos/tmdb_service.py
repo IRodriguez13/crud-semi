@@ -1,20 +1,26 @@
 import requests
 from django.conf import settings
 from django.core.cache import cache
+from dotenv import load_dotenv
+import os 
 import hashlib
 
 class TMDBService:
+    
     BASE_URL = "https://api.themoviedb.org/3"
     IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
     
-    def __init__(self):
-        # API Key gratuita de TMDB - en producción usar variable de entorno
-        self.api_key = "3fd2be6f0c70a2a598f084ddfb75487c"  # API key pública de ejemplo
+    def __init__(self, api_key=None):
+        self.api_key =  api_key or os.getenv('TMDB_API_KEY') # API key pública de ejemplo
     
     def _generate_cache_key(self, endpoint, params):
+    
         """Generate a unique cache key for the request"""
+    
         param_string = '&'.join([f"{k}={v}" for k, v in sorted(params.items())])
+    
         cache_string = f"tmdb_{endpoint}_{param_string}"
+    
         return hashlib.md5(cache_string.encode()).hexdigest()
     
     def _make_request(self, endpoint, params, cache_timeout=3600):
@@ -29,6 +35,7 @@ class TMDBService:
         # Make the API request
         url = f"{self.BASE_URL}{endpoint}"
         try:
+    
             response = requests.get(url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
@@ -36,8 +43,11 @@ class TMDBService:
             # Cache the response
             cache.set(cache_key, data, cache_timeout)
             return data
+    
         except requests.RequestException as e:
+    
             print(f"Error en request a TMDB: {e}")
+    
             return None
     
     def get_popular_movies(self, page=1):
@@ -59,13 +69,14 @@ class TMDBService:
         return self._make_request('/discover/movie', params)
     
     def search_movies(self, query, page=1):
+
         params = {
             'api_key': self.api_key,
             'language': 'es-ES',
             'query': query,
             'page': page
         }
-        # Shorter cache for search results
+
         return self._make_request('/search/movie', params, cache_timeout=1800)
     
     def get_movie_details(self, movie_id):
@@ -74,7 +85,7 @@ class TMDBService:
             'language': 'es-ES',
             'append_to_response': 'credits,videos'
         }
-        # Longer cache for movie details (they rarely change)
+
         return self._make_request(f'/movie/{movie_id}', params, cache_timeout=7200)
     
     def get_genres(self):
@@ -82,7 +93,7 @@ class TMDBService:
             'api_key': self.api_key,
             'language': 'es-ES'
         }
-        # Very long cache for genres (they rarely change)
+
         return self._make_request('/genre/movie/list', params, cache_timeout=86400)
     
     def format_movie_data(self, movie_data):
@@ -101,6 +112,7 @@ class TMDBService:
         }
     
     def calculate_price(self, rating):
+
         if rating >= 8.0:
             return 19.99
         elif rating >= 7.0:

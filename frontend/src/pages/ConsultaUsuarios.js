@@ -140,10 +140,7 @@ const ConsultaUsuarios = () => {
                         </td>
                         <td>{usuario.telefono || '-'}</td>
                         <td>
-                          {usuario.fecha_nacimiento 
-                            ? new Date(usuario.fecha_nacimiento).toLocaleDateString()
-                            : '-'
-                          }
+                          {usuario.fecha_nacimiento ? new Date(usuario.fecha_nacimiento).toLocaleDateString() : '-'}
                         </td>
                       </tr>
                     ))}

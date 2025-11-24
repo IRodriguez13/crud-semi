@@ -73,6 +73,8 @@ class ForoTemaSerializer(serializers.ModelSerializer):
                  'activo', 'total_respuestas', 'ultima_respuesta']
         read_only_fields = ['usuario']
     
+
+# Mostrar la respuesta del usuario.
     def get_ultima_respuesta(self, obj):
         ultima = obj.ultima_respuesta
         if ultima:
