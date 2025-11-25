@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
+import { useCart } from '../context/CartContext';
 
 const DetallePeliculaTMDB = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const DetallePeliculaTMDB = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
   const { currentUser } = useAuth();
   const { showSuccess, showError, showWarning } = useNotification();
+  const { refreshCart } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const DetallePeliculaTMDB = () => {
         cantidad: 1
       });
       showSuccess(`"${pelicula.titulo}" agregada al carrito`);
+      refreshCart();
     } catch (error) {
       showError('Error al agregar película al carrito');
     }

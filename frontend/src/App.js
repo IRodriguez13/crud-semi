@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import NotificationContainer from './components/NotificationContainer';
 import Home from './pages/Home';
@@ -20,27 +21,29 @@ function App() {
   return (
     <NotificationProvider>
       <AuthProvider>
-        <Router>
-          <div className="App">
-            <Navbar />
-            <div className="container mt-4">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registro" element={<Registro />} />
-                <Route path="/usuarios" element={<Usuarios />} />
-                <Route path="/peliculas" element={<Peliculas />} />
-                <Route path="/pelicula/:id" element={<DetallePelicula />} />
-                <Route path="/pelicula/tmdb/:id" element={<DetallePeliculaTMDB />} />
-                <Route path="/carrito" element={<Carrito />} />
-                <Route path="/foro" element={<Foro />} />
-                <Route path="/foro/tema/:id" element={<ForoTema />} />
-                <Route path="/empresa" element={<Empresa />} />
-              </Routes>
+        <CartProvider>
+          <Router>
+            <div className="App">
+              <Navbar />
+              <div className="container mt-4">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/registro" element={<Registro />} />
+                  <Route path="/usuarios" element={<Usuarios />} />
+                  <Route path="/peliculas" element={<Peliculas />} />
+                  <Route path="/pelicula/:id" element={<DetallePelicula />} />
+                  <Route path="/pelicula/tmdb/:id" element={<DetallePeliculaTMDB />} />
+                  <Route path="/carrito" element={<Carrito />} />
+                  <Route path="/foro" element={<Foro />} />
+                  <Route path="/foro/tema/:id" element={<ForoTema />} />
+                  <Route path="/empresa" element={<Empresa />} />
+                </Routes>
+              </div>
+              <NotificationContainer />
             </div>
-            <NotificationContainer />
-          </div>
-        </Router>
+          </Router>
+        </CartProvider>
       </AuthProvider>
     </NotificationProvider>
   );

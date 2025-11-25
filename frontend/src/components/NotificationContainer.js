@@ -27,17 +27,25 @@ const NotificationContainer = () => {
       {notifications.map(notification => (
         <div
           key={notification.id}
-          className={`toast show ${getTypeClass(notification.type)}`}
+          className={`toast show ${getTypeClass(notification.type)} toast-slide-in`}
           role="alert"
           style={{
-            minWidth: '300px',
+            minWidth: '320px',
+            maxWidth: '400px',
             marginBottom: '10px',
-            animation: 'slideInRight 0.3s ease-out'
+            animation: 'slideInRight 0.3s ease-out',
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid #333',
+            boxShadow: '0 8px 25px rgba(0, 0, 0, 0.5)'
           }}
         >
-          <div className="toast-header" style={{ backgroundColor: 'var(--card-bg)', borderBottom: '1px solid #333' }}>
-            <span className="me-2">{getIcon(notification.type)}</span>
-            <strong className="me-auto" style={{ color: 'var(--text-primary)' }}>
+          <div className="toast-header" style={{ 
+            backgroundColor: 'var(--card-bg)', 
+            borderBottom: '1px solid #333',
+            padding: '0.75rem 1rem'
+          }}>
+            <span className="me-2" style={{ fontSize: '1.2rem' }}>{getIcon(notification.type)}</span>
+            <strong className="me-auto" style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>
               {notification.type === 'success' && 'Éxito'}
               {notification.type === 'error' && 'Error'}
               {notification.type === 'warning' && 'Advertencia'}
@@ -47,27 +55,23 @@ const NotificationContainer = () => {
               type="button"
               className="btn-close btn-close-white"
               onClick={() => removeNotification(notification.id)}
-              style={{ filter: 'invert(1)' }}
+              style={{ 
+                filter: 'invert(1)',
+                opacity: '0.8'
+              }}
+              aria-label="Cerrar"
             ></button>
           </div>
-          <div className="toast-body" style={{ color: 'var(--text-secondary)' }}>
+          <div className="toast-body" style={{ 
+            color: 'var(--text-primary)', 
+            padding: '0.75rem 1rem',
+            fontSize: '0.9rem',
+            lineHeight: '1.5'
+          }}>
             {notification.message}
           </div>
         </div>
       ))}
-      
-      <style jsx>{`
-        @keyframes slideInRight {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-      `}</style>
     </div>
   );
 };

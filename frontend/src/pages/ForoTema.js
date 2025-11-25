@@ -249,7 +249,7 @@ const ForoTema = () => {
                 </>
               )}
             </div>
-            {currentUser && tema.usuario === currentUser.id && !editandoTema && (
+            {currentUser && (tema.usuario === currentUser.id || tema.usuario === parseInt(currentUser.id)) && !editandoTema && (
               <div className="btn-group btn-group-sm">
                 <button 
                   className="btn btn-outline-primary btn-sm"
@@ -298,17 +298,24 @@ const ForoTema = () => {
                     </small>
                   </div>
                 </div>
-                {currentUser && respuesta.usuario === currentUser.id && (
+                {currentUser && (
+                  (respuesta.usuario === currentUser.id) || 
+                  (respuesta.usuario === parseInt(currentUser.id)) ||
+                  (parseInt(respuesta.usuario) === currentUser.id) ||
+                  (parseInt(respuesta.usuario) === parseInt(currentUser.id))
+                ) && (
                   <div className="btn-group btn-group-sm">
                     <button 
                       className="btn btn-outline-primary btn-sm"
                       onClick={() => setEditandoRespuesta(respuesta.id)}
+                      title="Editar respuesta"
                     >
                       ✏️
                     </button>
                     <button 
                       className="btn btn-outline-danger btn-sm"
                       onClick={() => eliminarRespuesta(respuesta.id)}
+                      title="Eliminar respuesta"
                     >
                       🗑️
                     </button>

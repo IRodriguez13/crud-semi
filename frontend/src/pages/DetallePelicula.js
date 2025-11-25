@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const DetallePelicula = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const DetallePelicula = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
+  const { refreshCart } = useCart();
 
   useEffect(() => {
     fetchPelicula();
@@ -67,6 +69,7 @@ const DetallePelicula = () => {
         cantidad: 1
       });
       alert('Película agregada al carrito');
+      refreshCart();
     } catch (error) {
       alert('Error al agregar película al carrito');
     }

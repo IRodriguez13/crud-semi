@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -54,9 +56,11 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link className="nav-link position-relative" to="/carrito">
                     🛒 Carrito
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                      0
-                    </span>
+                    {cartCount > 0 && (
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {cartCount}
+                      </span>
+                    )}
                   </Link>
                 </li>
                 <li className="nav-item dropdown">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
+import { useCart } from '../context/CartContext';
 
 const Carrito = () => {
   const [carrito, setCarrito] = useState(null);
@@ -9,6 +10,7 @@ const Carrito = () => {
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
   const { showSuccess, showError } = useNotification();
+  const { refreshCart } = useCart();
 
   useEffect(() => {
     if (currentUser) {
@@ -33,6 +35,7 @@ const Carrito = () => {
         cantidad: nuevaCantidad
       });
       fetchCarrito();
+      refreshCart();
       showSuccess('Cantidad actualizada');
     } catch (error) {
       showError('Error al actualizar cantidad');
@@ -43,6 +46,7 @@ const Carrito = () => {
     try {
       await axios.delete(`http://localhost:8000/api/carrito/item/${itemId}/eliminar/`);
       fetchCarrito();
+      refreshCart();
       showSuccess(`"${titulo}" eliminada del carrito`);
     } catch (error) {
       showError('Error al eliminar película');

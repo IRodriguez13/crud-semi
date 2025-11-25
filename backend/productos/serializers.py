@@ -60,7 +60,7 @@ class ForoRespuestaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForoRespuesta
         fields = ['id', 'tema', 'usuario', 'usuario_nombre', 'contenido', 'fecha_creacion', 'editado', 'fecha_edicion']
-        read_only_fields = ['usuario', 'editado', 'fecha_edicion']
+        read_only_fields = ['tema', 'usuario', 'editado', 'fecha_edicion']
 
 class ForoTemaSerializer(serializers.ModelSerializer):
     usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
