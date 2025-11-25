@@ -14,6 +14,8 @@ const ForoTema = () => {
   const [editandoRespuesta, setEditandoRespuesta] = useState(null);
   const [editandoTema, setEditandoTema] = useState(false);
   const [temaEditado, setTemaEditado] = useState({ titulo: '', descripcion: '' });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [respuestaAEliminar, setRespuestaAEliminar] = useState(null);
   const { currentUser } = useAuth();
   const { showSuccess, showError } = useNotification();
 
@@ -88,14 +90,20 @@ const ForoTema = () => {
     }
   };
 
-  const eliminarRespuesta = async (respuestaId) => {
-    if (!window.confirm('¿Estás seguro de que quieres eliminar esta respuesta?')) {
-      return;
-    }
+  const confirmarEliminarRespuesta = (respuestaId) => {
+    setRespuestaAEliminar(respuestaId);
+    setShowDeleteModal(true);
+  };
+
+  const eliminarRespuesta = async () => {
+    if (!respuestaAEliminar) return;
+    
     try {
-      await axios.delete(`http://localhost:8000/api/foro/respuesta/${respuestaId}/`);
+      await axios.delete(`http://localhost:8000/api/foro/respuesta/${respuestaAEliminar}/`);
       fetchRespuestas();
       showSuccess('Respuesta eliminada');
+      setShowDeleteModal(false);
+      setRespuestaAEliminar(null);
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.response?.data?.detail || 'Error al eliminar respuesta';
       showError(errorMessage);
@@ -104,6 +112,8 @@ const ForoTema = () => {
           window.location.href = '/login';
         }
       }
+      setShowDeleteModal(false);
+      setRespuestaAEliminar(null);
     }
   };
 
@@ -314,7 +324,7 @@ const ForoTema = () => {
                     </button>
                     <button 
                       className="btn btn-outline-danger btn-sm"
-                      onClick={() => eliminarRespuesta(respuesta.id)}
+                      onClick={() => confirmarEliminarRespuesta(respuesta.id)}
                       title="Eliminar respuesta"
                     >
                       🗑️
@@ -385,6 +395,87 @@ const ForoTema = () => {
           </form>
         </div>
       </div>
+
+      {/* Modal de confirmación para eliminar respuesta */}
+      {showDeleteModal && (
+        <div 
+          className="modal show d-block" 
+          style={{ backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1050 }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowDeleteModal(false);
+              setRespuestaAEliminar(null);
+            }
+          }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content" style={{
+              backgroundColor: 'var(--card-bg)',
+              border: '1px solid #333',
+              borderRadius: '8px',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.5)'
+            }}>
+              <div className="modal-header border-bottom border-secondary" style={{
+                backgroundColor: 'var(--darker-bg)',
+                borderBottom: '1px solid #333'
+              }}>
+                <h5 className="modal-title text-white">
+                  ⚠️ Confirmar Eliminación
+                </h5>
+                <button 
+                  type="button" 
+                  className="btn-close btn-close-white"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setRespuestaAEliminar(null);
+                  }}
+                  style={{ filter: 'invert(1)' }}
+                ></button>
+              </div>
+              <div className="modal-body" style={{
+                backgroundColor: 'var(--card-bg)',
+                color: 'var(--text-primary)',
+                padding: '1.5rem'
+              }}>
+                <p className="mb-0" style={{ fontSize: '1rem', lineHeight: '1.6' }}>
+                  ¿Estás seguro de que quieres eliminar esta respuesta? Esta acción no se puede deshacer.
+                </p>
+              </div>
+              <div className="modal-footer border-top border-secondary" style={{
+                backgroundColor: 'var(--darker-bg)',
+                borderTop: '1px solid #333',
+                padding: '1rem 1.5rem'
+              }}>
+                <button 
+                  type="button" 
+                  className="btn btn-outline-secondary"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setRespuestaAEliminar(null);
+                  }}
+                  style={{
+                    color: 'var(--text-primary)',
+                    borderColor: '#555'
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-danger"
+                  onClick={eliminarRespuesta}
+                  style={{
+                    backgroundColor: 'var(--primary-red)',
+                    borderColor: 'var(--primary-red)'
+                  }}
+                >
+                  🗑️ Eliminar Respuesta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

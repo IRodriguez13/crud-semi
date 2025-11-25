@@ -263,15 +263,63 @@ code {
   background-color: var(--card-bg);
   border: 1px solid #333;
   border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .dropdown-item {
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
   background-color: var(--darker-bg);
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item:focus {
+  background-color: var(--darker-bg);
+  color: var(--text-primary) !important;
+}
+
+.dropdown-divider {
+  border-color: #333;
+  margin: 0.5rem 0;
+}
+
+/* Tables */
+.table {
+  color: var(--text-primary) !important;
+  background-color: transparent;
+}
+
+.table thead th {
+  color: var(--text-primary) !important;
+  border-bottom: 2px solid #333;
+  background-color: var(--darker-bg);
+  font-weight: 600;
+}
+
+.table tbody td {
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid #333;
+}
+
+.table tbody tr {
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.table-striped tbody tr:nth-of-type(odd):hover {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Spinner */

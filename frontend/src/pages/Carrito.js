@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -11,6 +12,7 @@ const Carrito = () => {
   const { currentUser } = useAuth();
   const { showSuccess, showError } = useNotification();
   const { refreshCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
@@ -170,7 +172,10 @@ const Carrito = () => {
                   <button className="btn btn-success btn-lg">
                     💳 Proceder al Pago
                   </button>
-                  <button className="btn btn-outline-primary">
+                  <button 
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate('/peliculas')}
+                  >
                     🎬 Seguir Comprando
                   </button>
                 </div>
@@ -185,9 +190,9 @@ const Carrito = () => {
           </div>
           <h3>Tu carrito está vacío</h3>
           <p className="text-muted">¡Explora nuestro catálogo y encuentra películas increíbles!</p>
-          <a href="/peliculas" className="btn btn-primary">
+          <Link to="/peliculas" className="btn btn-primary">
             🎬 Ver Películas
-          </a>
+          </Link>
         </div>
       )}
     </div>
