@@ -222,15 +222,3 @@ crud-sem/
 4. Participa en el foro "Ustedes"
 5. Agrega películas al carrito
 
-## 📞 Soporte
-
-Si tienes problemas:
-1. Revisa la sección "Solución de Problemas" arriba
-2. Verifica que todos los prerrequisitos estén instalados
-3. Asegúrate de seguir los pasos en orden
-4. Revisa los mensajes de error en las terminales
-
----
-
-**¡Disfruta de BlockBuster! 🎬**
-
